@@ -1,7 +1,9 @@
 from flask import Blueprint, render_template, request
 from app import app
 from datetime import datetime
-from .sshlogin import generate_synthetic_logs, save_logs, generate_daily_activity_logs
+from .sshlogin import generate_synthetic_logs as ssh_gsl
+from .sshlogin import save_logs as ssh_sl
+from .sshlogin import generate_daily_activity_logs as ssh_dal
 
 @app.route('/')
 @app.route('/index')
@@ -32,17 +34,17 @@ def submit_form():
         start_timestamp = datetime.strptime(timestamp_str, '%Y-%m-%dT%H:%M:%S')
 
         # Generate synthetic logs
-        logs = generate_synthetic_logs(start_timestamp, host_name, source_ip, user_acc, event_outcome, num_logs)
+        logs = ssh_gsl(start_timestamp, host_name, source_ip, user_acc, event_outcome, num_logs)
 
         # Save logs to a file
-        save_logs(logs)
+        ssh_sl(logs)
 
         return "SSH Logs generated successfully!"
     
     if 'quickGen' in request.form and request.form.get('dropdown') == 'option1':
         # Generate daily activity logs for 10 users with random brute force attacks and off-hours login attempts
-        logs = generate_daily_activity_logs()
-        save_logs(logs)
+        logs = ssh_dal()
+        ssh_sl(logs)
         return "Daily network activity logs generated successfully!"
 
     return "No valid option selected!"
