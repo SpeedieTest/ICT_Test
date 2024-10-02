@@ -46,43 +46,42 @@
                 </select>
             </div>
 
-
             <!-- Form sections that will be conditionally displayed -->
 
             <!-- SSH Login Form -->
             <div id="section1" style="display: none;">
                 <h3>SSH Login</h3>
                 <div class="form-group">
-                    <label for="timestamp">Timestamp:</label>
-                    <input type="datetime-local" step="1" id="timestamp" name="timestamp">
+                    <label for="ssh_timestamp">Timestamp:</label>
+                    <input type="datetime-local" step="1" id="ssh_timestamp" name="ssh_timestamp">
                 </div>
 
                 <div class="form-group">
-                    <label for="hostName">Host Name:</label>
-                    <input type="text" id="hostName" name="hostName" placeholder="Enter host name">
+                    <label for="ssh_hostName">Host Name:</label>
+                    <input type="text" id="ssh_hostName" name="ssh_hostName" placeholder="Enter host name">
                 </div>
 
                 <div class="form-group">
-                    <label for="sourceIP">Source IP:</label>
-                    <input type="text" id="sourceIP" name="sourceIP" placeholder="Enter the source IP">
+                    <label for="ssh_sourceIP">Source IP:</label>
+                    <input type="text" id="ssh_sourceIP" name="ssh_sourceIP" placeholder="Enter the source IP">
                 </div>
 
                 <div class="form-group">
-                    <label for="userAcc">User account:</label>
-                    <input type="text" id="userAcc" name="userAcc" placeholder="Enter the user account">
+                    <label for="ssh_userAcc">User account:</label>
+                    <input type="text" id="ssh_userAcc" name="ssh_userAcc" placeholder="Enter the user account">
                 </div>
 
                 <div class="form-group">
-                    <label for="eventOutcome">Event Outcome:</label>
-                    <input type="radio" id="success" name="eventOutcome" value="success">
-                    <label for="success">Success</label>
-                    <input type="radio" id="fail" name="eventOutcome" value="fail">
-                    <label for="fail">Failed</label>
+                    <label for="ssh_eventOutcome">Event Outcome:</label>
+                    <input type="radio" id="ssh_success" name="ssh_eventOutcome" value="ssh_success">
+                    <label for="ssh_success">Success</label>
+                    <input type="radio" id="ssh_fail" name="ssh_eventOutcome" value="ssh_fail">
+                    <label for="ssh_fail">Failed</label>
                 </div>
 
                 <div class="form-group">
-                    <label for="NumLogs">Number of Logs:</label>
-                    <input type="number" id="NumLogs" name="NumLogs" placeholder="Enter the number of Logs">
+                    <label for="ssh_NumLogs">Number of Logs:</label>
+                    <input type="number" id="ssh_NumLogs" name="ssh_NumLogs" placeholder="Enter the number of Logs">
                 </div>
             </div>
 
@@ -90,33 +89,34 @@
             <div id="section2" style="display: none;">
                 <h3>File System Event Log (Copy File)</h3>
                 <div class="form-group">
-                    <label for="timestamp">Timestamp:</label>
-                    <input type="datetime-local" step="1" id="timestamp" name="timestamp">
+                    <label for="fs_timestamp">Timestamp:</label>
+                    <input type="datetime-local" step="1" id="fs_timestamp" name="fs_timestamp">
                 </div>
 
                 <div class="form-group">
-                    <label for="hostName">Host Name:</label>
-                    <input type="text" id="hostName" name="hostName" placeholder="Enter host name:">
+                    <label for="fs_hostName">Host Name:</label>
+                    <input type="text" id="fs_hostName" name="fs_hostName" placeholder="Enter host name">
                 </div>
 
                 <div class="form-group">
-                    <label for="userAcc">User account:</label>
-                    <input type="text" id="userAcc" name="userAcc" placeholder="Enter the user account">
+                    <label for="fs_userAcc">User account:</label>
+                    <input type="text" id="fs_userAcc" name="fs_userAcc" placeholder="Enter the user account">
                 </div>
 
                 <div class="form-group">
-                    <label for="fileName">File Name:</label>
-                    <input type="text" id="fileName" name="fileName" placeholder="Enter file name">
+                    <label for="fs_fileName">File Name:</label>
+                    <input type="text" id="fs_fileName" name="fs_fileName" placeholder="Enter file name">
                 </div>
 
                 <div class="form-group">
-                    <label for="sourcePath">Source Path:</label>
-                    <input type="text" id="sourcePath" name="sourcePath" placeholder="Enter Source Path">
+                    <label for="fs_sourcePath">Source Path:</label>
+                    <input type="text" id="fs_sourcePath" name="fs_sourcePath" placeholder="Enter Source Path">
                 </div>
 
                 <div class="form-group">
-                    <label for="destinationPath">Destination Path:</label>
-                    <input type="text" id="destinationPath" name="destinationPath" placeholder="Enter Destination Path">
+                    <label for="fs_destinationPath">Destination Path:</label>
+                    <input type="text" id="fs_destinationPath" name="fs_destinationPath"
+                        placeholder="Enter Destination Path">
                 </div>
             </div>
 
@@ -124,28 +124,28 @@
             <div id="section3" style="display: none;">
                 <h3>File Transfer Protocol Logs</h3>
                 <div class="form-group">
-                    <label for="timestamp">Timestamp:</label>
-                    <input type="datetime-local" step="1" id="timestamp" name="timestamp">
+                    <label for="ftp_timestamp">Timestamp:</label>
+                    <input type="datetime-local" step="1" id="ftp_timestamp" name="timestamp">
                 </div>
 
                 <div class="form-group">
-                    <label for="clientipaddr">Client IP Address:</label>
-                    <input type="text" id="clientipaddr" name="clientipaddr" placeholder="Enter Client IP">
+                    <label for="ftp_clientipaddr">Client IP Address:</label>
+                    <input type="text" id="ftp_clientipaddr" name="clientipaddr" placeholder="Enter Client IP">
                 </div>
 
                 <div class="form-group">
-                    <label for="filesize">File Size (GB):</label>
-                    <input type="number" id="filesize" name="filesize" placeholder="Enter file size (GB)">
+                    <label for="ftp_filesize">File Size (GB):</label>
+                    <input type="number" id="ftp_filesize" name="filesize" placeholder="Enter file size (GB)">
                 </div>
 
                 <div class="form-group">
-                    <label for="username">Username:</label>
-                    <input type="text" id="username" name="username" placeholder="Enter username">
+                    <label for="ftp_username">Username:</label>
+                    <input type="text" id="ftp_username" name="username" placeholder="Enter username">
                 </div>
 
                 <div class="form-group">
-                    <label for="filePath">File Paths:</label>
-                    <input type="text" id="filePath" name="filePath" placeholder="Enter file path">
+                    <label for="ftp_filePath">File Paths:</label>
+                    <input type="text" id="ftp_filePath" name="filePath" placeholder="Enter file path">
                 </div>
             </div>
 
@@ -153,49 +153,43 @@
             <div id="section4" style="display: none;">
                 <h3>iptables Log</h3>
                 <div class="form-group">
-                    <label for="timestamp">Timestamp:</label>
-                    <input type="datetime-local" step="1" id="timestamp" name="timestamp">
+                    <label for="iptables_timestamp">Timestamp:</label>
+                    <input type="datetime-local" step="1" id="iptables_timestamp" name="iptables_timestamp">
                 </div>
 
                 <div class="form-group">
-                    <label for="hostName">Host Name:</label>
-                    <input type="text" id="hostName" name="hostName" placeholder="Enter host name">
+                    <label for="iptables_hostName">Host Name:</label>
+                    <input type="text" id="iptables_hostName" name="iptables_hostName" placeholder="Enter host name">
                 </div>
 
                 <div class="form-group">
-                    <label for="sourceipaddr">Source IP Address:</label>
-                    <input type="text" id="sourceipaddr" name="sourceipaddr" placeholder="Enter source IP">
+                    <label for="iptables_sourceipaddr">Source IP Address:</label>
+                    <input type="text" id="iptables_sourceipaddr" name="iptables_sourceipaddr"
+                        placeholder="Enter source IP">
                 </div>
 
                 <div class="form-group">
-                    <label for="sourceport">Source Port:</label>
-                    <input type="text" id="sourceport" name="sourceport" placeholder="Enter source port">
+                    <label for="iptables_sourceport">Source Port:</label>
+                    <input type="text" id="iptables_sourceport" name="iptables_sourceport"
+                        placeholder="Enter source port">
                 </div>
 
                 <div class="form-group">
-                    <label for="destinationipaddr">Destination IP Address:</label>
-                    <input type="text" id="destinationipaddr" name="destinationipaddr"
+                    <label for="iptables_destinationipaddr">Destination IP Address:</label>
+                    <input type="text" id="iptables_destinationipaddr" name="iptables_destinationipaddr"
                         placeholder="Enter destination IP">
                 </div>
 
                 <div class="form-group">
-                    <label for="destinationport">Destination Port:</label>
-                    <input type="text" id="destinationport" name="destinationport" placeholder="Enter destination port">
+                    <label for="iptables_destinationport">Destination Port:</label>
+                    <input type="text" id="iptables_destinationport" name="iptables_destinationport"
+                        placeholder="Enter destination port">
                 </div>
 
                 <div class="form-group">
-                    <label for="packetlength">Packet Length:</label>
-                    <input type="text" id="packetlength" name="packetlength" placeholder="Enter packet length">
-                </div>
-
-                <div class="form-group">
-                    <label for="NumLogs">Number of Logs:</label>
-                    <input type="number" id="NumLogs" name="NumLogs" placeholder="Enter the number of Logs">
-                </div>
-
-                <div class="form-group">
-                    <label for="frequency">Frequency of Logs (in Minutes):</label>
-                    <input type="number" id="frequency" name="frequency" placeholder="Enter Frequency in Minutes">
+                    <label for="iptables_packetlength">Packet Length:</label>
+                    <input type="text" id="iptables_packetlength" name="iptables_packetlength"
+                        placeholder="Enter packet length">
                 </div>
             </div>
 
@@ -203,104 +197,104 @@
             <div id="section5" style="display: none;">
                 <h3>SNORT Malware Detection</h3>
                 <div class="form-group">
-                    <label for="timestamp">Timestamp:</label>
-                    <input type="datetime-local" step="1" id="timestamp" name="timestamp">
+                    <label for="snort_timestamp">Timestamp:</label>
+                    <input type="datetime-local" step="1" id="snort_timestamp" name="snort_timestamp">
                 </div>
 
                 <div class="form-group">
-                    <label for="filehash">File Hash:</label>
-                    <input type="text" id="filehash" name="filehash" placeholder="Enter file hash">
+                    <label for="snort_filehash">File Hash:</label>
+                    <input type="text" id="snort_filehash" name="snort_filehash" placeholder="Enter file hash">
                 </div>
 
                 <div class="form-group">
-                    <label for="sourceip">Source IP:</label>
-                    <input type="text" id="sourceip" name="sourceip" placeholder="Enter source IP">
+                    <label for="snort_sourceip">Source IP:</label>
+                    <input type="text" id="snort_sourceip" name="snort_sourceip" placeholder="Enter source IP">
                 </div>
 
                 <div class="form-group">
-                    <label for="sourceport">Source Port:</label>
-                    <input type="text" id="sourceport" name="sourceport" placeholder="Enter source port">
+                    <label for="snort_sourceport">Source Port:</label>
+                    <input type="text" id="snort_sourceport" name="snort_sourceport" placeholder="Enter source port">
                 </div>
 
                 <div class="form-group">
-                    <label for="filename">File Name:</label>
-                    <input type="text" id="filename" name="filename" placeholder="Enter file name">
+                    <label for="snort_filename">File Name:</label>
+                    <input type="text" id="snort_filename" name="snort_filename" placeholder="Enter file name">
                 </div>
 
                 <div class="form-group">
-                    <label for="filesize">File Size:</label>
-                    <input type="number" id="filesize" name="filesize" placeholder="Enter file size">
+                    <label for="snort_filesize">File Size:</label>
+                    <input type="number" id="snort_filesize" name="snort_filesize" placeholder="Enter file size">
                 </div>
 
                 <div class="form-group">
-                    <label for="filetype">File Type:</label>
-                    <input type="radio" id="xdosexec" name="filetype" value="/xdosexec/">
+                    <label for="snort_filetype">File Type:</label>
+                    <input type="radio" id="xdosexec" name="snort_filetype" value="/xdosexec/">
                     <label for="xdosexec">/X-Dosexec/</label>
-                    <input type="radio" id="xpython" name="filetype" value="/xpython/">
+                    <input type="radio" id="xpython" name="snort_filetype" value="/xpython/">
                     <label for="xpython">/X-Python/</label>
-                    <input type="radio" id="plain" name="filetype" value="/plain/">
+                    <input type="radio" id="plain" name="snort_filetype" value="/plain/">
                     <label for="plain">/Plain/</label>
-                    <input type="radio" id="mp4" name="filetype" value="/mp4/">
+                    <input type="radio" id="mp4" name="snort_filetype" value="/mp4/">
                     <label for="mp4">/mp4/</label>
-                    <input type="radio" id="json" name="filetype" value="/json/">
+                    <input type="radio" id="json" name="snort_filetype" value="/json/">
                     <label for="json">/json/</label>
-                    <input type="radio" id="csv" name="filetype" value="/csv/">
+                    <input type="radio" id="csv" name="snort_filetype" value="/csv/">
                     <label for="csv">/csv/</label>
-                    <input type="radio" id="zip" name="filetype" value="/zip/">
+                    <input type="radio" id="zip" name="snort_filetype" value="/zip/">
                     <label for="zip">/zip/</label>
-                    <input type="radio" id="gif" name="filetype" value="/gif/">
+                    <input type="radio" id="gif" name="snort_filetype" value="/gif/">
                     <label for="gif">/gif/</label>
-                    <input type="radio" id="pdf" name="filetype" value="/pdf/">
+                    <input type="radio" id="pdf" name="snort_filetype" value="/pdf/">
                     <label for="pdf">/pdf/</label>
                 </div>
 
                 <div class="form-group">
-                    <label for="filePath">File Path:</label>
-                    <input type="text" id="filePath" name="filePath" placeholder="Enter File Path">
+                    <label for="snort_filePath">File Path:</label>
+                    <input type="text" id="snort_filePath" name="snort_filePath" placeholder="Enter File Path">
                 </div>
-
-
             </div>
 
             <!-- NetFlow Log Form -->
             <div id="section6" style="display: none;">
                 <h3>NetFlow</h3>
                 <div class="form-group">
-                    <label for="timestamp">Timestamp:</label>
-                    <input type="datetime-local" step="1" id="timestamp" name="timestamp">
+                    <label for="netflow_timestamp">Timestamp:</label>
+                    <input type="datetime-local" step="1" id="netflow_timestamp" name="netflow_timestamp">
                 </div>
 
                 <div class="form-group">
-                    <label for="sourceip">Source IP:</label>
-                    <input type="text" id="sourceip" name="sourceip"
+                    <label for="netflow_sourceip">Source IP:</label>
+                    <input type="text" id="netflow_sourceip" name="netflow_sourceip"
                         placeholder="Enter source IP e.g. 10.1.1.1 or 10.1.1.0/8">
                 </div>
 
                 <div class="form-group">
-                    <label for="destinationip">Destination IP:</label>
-                    <input type="text" id="destinationip" name="destinationip" placeholder="Enter destination IP">
+                    <label for="netflow_destinationip">Destination IP:</label>
+                    <input type="text" id="netflow_destinationip" name="netflow_destinationip"
+                        placeholder="Enter destination IP">
                 </div>
 
                 <div class="form-group">
-                    <label for="sourceport">Source Port:</label>
-                    <input type="number" id="sourceport" name="sourceport" placeholder="Enter source port">
+                    <label for="netflow_sourceport">Source Port:</label>
+                    <input type="number" id="netflow_sourceport" name="netflow_sourceport"
+                        placeholder="Enter source port">
                 </div>
 
                 <div class="form-group">
-                    <label for="destinationport">Destination Port:</label>
-                    <input type="number" id="destinationport" name="destinationport"
+                    <label for="netflow_destinationport">Destination Port:</label>
+                    <input type="number" id="netflow_destinationport" name="netflow_destinationport"
                         placeholder="Enter destination port">
                 </div>
 
                 <div class="form-group">
-                    <label for="numberofconnections">Number of Connections:</label>
-                    <input type="number" id="numberofconnections" name="numberofconnections"
+                    <label for="netflow_numberofconnections">Number of Connections:</label>
+                    <input type="number" id="netflow_numberofconnections" name="netflow_numberofconnections"
                         placeholder="Enter number of connections">
                 </div>
 
                 <div class="form-group">
-                    <label for="timeperiodinminutes">Time Period in Minutes:</label>
-                    <input type="number" id="timeperiodinminutes" name="timeperiodinminutes"
+                    <label for="netflow_timeperiodinminutes">Time Period in Minutes:</label>
+                    <input type="number" id="netflow_timeperiodinminutes" name="netflow_timeperiodinminutes"
                         placeholder="Enter time period in minutes">
                 </div>
 
@@ -314,18 +308,19 @@
             <div id="section7" style="display: none;">
                 <h3>Kernel Log</h3>
                 <div class="form-group">
-                    <label for="timestamp">Timestamp:</label>
-                    <input type="datetime-local" step="1" id="timestamp" name="timestamp">
+                    <label for="kernel_timestamp">Timestamp:</label>
+                    <input type="datetime-local" step="1" id="kernel_timestamp" name="kernel_timestamp">
                 </div>
 
                 <div class="form-group">
-                    <label for="hostname">Host Name:</label>
-                    <input type="text" id="hostname" name="hostname" placeholder="Enter host name">
+                    <label for="kernel_hostname">Host Name:</label>
+                    <input type="text" id="kernel_hostname" name="kernel_hostname" placeholder="Enter host name">
                 </div>
 
                 <div class="form-group">
-                    <label for="processname">Process Name:</label>
-                    <input type="text" id="processname" name="processname" placeholder="Enter process name">
+                    <label for="kernel_processname">Process Name:</label>
+                    <input type="text" id="kernel_processname" name="kernel_processname"
+                        placeholder="Enter process name">
                 </div>
 
             </div>
@@ -334,28 +329,28 @@
             <div id="section8" style="display: none;">
                 <h3>Syslog</h3>
                 <div class="form-group">
-                    <label for="timestamp">Timestamp:</label>
-                    <input type="datetime-local" step="1" id="timestamp" name="timestamp">
+                    <label for="syslog_timestamp">Timestamp:</label>
+                    <input type="datetime-local" step="1" id="syslog_timestamp" name="syslog_timestamp">
                 </div>
 
                 <div class="form-group">
-                    <label for="hostname">Hostname:</label>
-                    <input type="text" id="hostname" name="hostname" placeholder="Enter host name">
+                    <label for="syslog_hostname">Hostname:</label>
+                    <input type="text" id="syslog_hostname" name="syslog_hostname" placeholder="Enter host name">
                 </div>
 
                 <div class="form-group">
-                    <label for="username">Username:</label>
-                    <input type="text" id="username" name="username" placeholder="Enter username">
+                    <label for="syslog_username">Username:</label>
+                    <input type="text" id="syslog_username" name="syslog_username" placeholder="Enter username">
                 </div>
 
                 <div class="form-group">
-                    <label for="filepath">File Path:</label>
-                    <input type="text" id="filepath" name="filepath" placeholder="Enter file path">
+                    <label for="syslog_filepath">File Path:</label>
+                    <input type="text" id="syslog_filepath" name="syslog_filepath" placeholder="Enter file path">
                 </div>
 
                 <div class="form-group">
-                    <label for="filename">File Name:</label>
-                    <input type="text" id="filename" name="filename" placeholder="Enter file name">
+                    <label for="syslog_filename">File Name:</label>
+                    <input type="text" id="syslog_filename" name="syslog_filename" placeholder="Enter file name">
                 </div>
             </div>
 
