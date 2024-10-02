@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request
+from flask import render_template, request
 from app import app
 from datetime import datetime
 from .sshlogin import generate_synthetic_logs as ssh_gsl
@@ -7,6 +7,7 @@ from .sshlogin import generate_daily_activity_logs as ssh_dal
 from .netflow import generate_synthetic_logs as netflow_gsl
 from .netflow import save_logs as netflow_sl
 from .netflow import generate_daily_activity_logs as netflow_dal
+from .value_generator import generate_random_username, generate_random_hostname, generate_random_source_path, generate_random_destination_path
 
 @app.route('/')
 @app.route('/index')
@@ -56,9 +57,9 @@ def submit_form():
 
         return "SSH Logs generated successfully!"
 
-    # Check if the user clicked on 'Quick Gen' button
+    # Check if the user clicked on 'Quick Gen' button for SSH logs
     if 'quickGen' in request.form and request.form.get('dropdown') == 'option1':
-        # Generate daily activity logs for 10 users with random brute force attacks and off-hours login attempts
+        # Generate daily activity logs for multiple users with random brute force attacks and off-hours login attempts
         logs = ssh_dal()
         ssh_sl(logs)
         return "Daily network activity logs generated successfully!"
