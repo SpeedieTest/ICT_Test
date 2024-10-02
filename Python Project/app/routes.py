@@ -4,10 +4,9 @@ from datetime import datetime
 from .sshlogin import generate_synthetic_logs as ssh_gsl
 from .sshlogin import save_logs as ssh_sl
 from .sshlogin import generate_daily_activity_logs as ssh_dal
-from .sshlogin import generate_synthetic_logs as netflow_gsl
-from .sshlogin import save_logs as netflow_sl
-from .sshlogin import generate_daily_activity_logs as netflow_dal
-
+from .netflow import generate_synthetic_logs as netflow_gsl
+from .netflow import save_logs as netflow_sl
+from .netflow import generate_daily_activity_logs as netflow_dal
 
 @app.route('/')
 @app.route('/index')
@@ -130,7 +129,7 @@ def submit_form():
     if 'quickGen' in request.form and request.form.get('dropdown') == 'option6':
         # Generate daily activity logs for 10 users with random brute force attacks and off-hours login attempts
         logs = netflow_dal()
-        ssh_sl(logs)
+        netflow_sl(logs)
         return "Daily network activity logs generated successfully!"
 
     return "No valid option selected!"
