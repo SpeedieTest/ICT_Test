@@ -21,43 +21,80 @@ def analyse():
 
 @app.route('/submit', methods=['POST'])
 def submit_form():
-    # Check if the user selected SSH Login (Option 1)
-    if 'manualGen' in request.form and request.form.get('dropdown') == 'option1':
-        timestamp_str = request.form.get('ssh_timestamp')
-        host_name = request.form.get('ssh_hostName')
-        source_ip = request.form.get('ssh_sourceIP')
-        user_acc = request.form.get('ssh_userAcc')
-        event_outcome = request.form.get('ssh_eventOutcome')
-        num_logs_str = request.form.get('ssh_NumLogs')
+    log_type = request.form.get('dropdown')
 
-        # Validate num_logs
-        if num_logs_str is None or num_logs_str.strip() == '':
-            return "Error: Number of logs not provided.", 400
+    # Define a dictionary that maps log_type to the respective function calls
+    manual_gen_switch = {
+        'option1': handle_ssh_logs,
+    }
 
-        try:
-            num_logs = int(num_logs_str)
-        except ValueError:
-            return "Error: Invalid number of logs provided.", 400
+    quick_gen_switch = {
+        'option1': lambda: handle_quick_gen('option1'),
+    }
 
-        # Convert the timestamp
-        try:
-            start_timestamp = datetime.strptime(timestamp_str, '%Y-%m-%dT%H:%M:%S')
-        except ValueError:
-            return "Error: Invalid timestamp format.", 400
+    # Handle manual generation based on log type
+    if 'manualGen' in request.form:
+        if log_type in manual_gen_switch:
+            return manual_gen_switch[log_type](request)
+        return "No valid option selected for manual generation."
 
-        # Generate SSH logs
-        logs = ssh_gsl(start_timestamp, host_name, source_ip, user_acc, event_outcome, num_logs)
-
-        # Save logs to a file
-        ssh_sl(logs)
-
-        return "SSH Logs generated successfully!"
-
-    # Check if the user clicked on 'Quick Gen' button for SSH logs
-    if 'quickGen' in request.form and request.form.get('dropdown') == 'option1':
-        # Generate daily activity logs for multiple users with random brute force attacks and off-hours login attempts
-        logs = ssh_dal()
-        ssh_sl(logs)
-        return "Daily network activity logs generated successfully!"
+    # Handle quick generation
+    if 'quickGen' in request.form:
+        if log_type in quick_gen_switch:
+            return quick_gen_switch[log_type]()
+        return "No valid option selected for quick generation."
 
     return "No valid option selected!"
+
+# Handle Quick Generation for logs using a "switch"-like dictionary
+def handle_quick_gen(log_type):
+    # Define a dictionary that maps log_type to the respective quick generation function
+    quick_gen_switch = {
+        'option1': generate_ssh_logs_quick,
+    }
+
+    # Use the log_type as a key to call the respective function
+    if log_type in quick_gen_switch:
+        return quick_gen_switch[log_type]()
+    else:
+        return "Invalid log type for quick generation."
+
+# Helper function to parse timestamp
+def parse_timestamp(timestamp_str):
+    try:
+        return datetime.strptime(timestamp_str, '%Y-%m-%dT%H:%M:%S')
+    except ValueError:
+        return None
+
+
+# Handle SSH log generation
+def handle_ssh_logs(request):
+    timestamp_str = request.form.get('ssh_timestamp')
+    host_name = request.form.get('ssh_hostName')
+    source_ip = request.form.get('ssh_sourceIP')
+    user_acc = request.form.get('ssh_userAcc')
+    event_outcome = request.form.get('ssh_eventOutcome')
+    num_logs_str = request.form.get('ssh_NumLogs')
+
+    # Validate number of logs
+    try:
+        num_logs = int(num_logs_str)
+    except (TypeError, ValueError):
+        return "Error: Invalid number of logs provided.", 400
+
+    # Parse timestamp
+    start_timestamp = parse_timestamp(timestamp_str)
+    if not start_timestamp:
+        return "Error: Invalid timestamp format.", 400
+
+    # Generate and save SSH logs
+    logs = ssh_gsl(start_timestamp, host_name, source_ip, user_acc, event_outcome, num_logs)
+    ssh_sl(logs)
+
+    return "SSH Logs generated successfully!"
+
+# Function to handle quick generation of SSH logs
+def generate_ssh_logs_quick():
+    logs = ssh_dal()  # Call the function that generates daily SSH activity logs
+    ssh_sl(logs)  # Save the logs
+    return "Daily network activity logs generated successfully!"
