@@ -115,7 +115,7 @@ def handle_netflow_logs(request):
 
     # Parse timestamp
     timestamp = parse_timestamp(timestamp_str)
-    if not start_timestamp:
+    if not timestamp:
         return "Error: Invalid timestamp format.", 400
 
     # Generate and save SSH logs
