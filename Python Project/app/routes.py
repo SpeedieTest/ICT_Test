@@ -73,7 +73,6 @@ def parse_timestamp(timestamp_str):
     except ValueError:
         return None
 
-
 # Handle SSH log generation
 def handle_ssh_logs(request):
     timestamp_str = request.form.get('ssh_timestamp')
@@ -106,13 +105,19 @@ def handle_netflow_logs(request):
     destination_ip = request.form.get('netflow_destinationip')
     source_port = request.form.get('netflow_sourceport')
     destination_port = request.form.get('netflow_destinationport')
-    no_connections = request.form.get('netflow_numberofconnections')
+    no_connections_str = request.form.get('netflow_numberofconnections')
     time_period = request.form.get('netflow_timeperiodinminutes')
 
     #speedie needs to convert from sting to
     #mine should work but no quarantee
     #if not working look at line 86 "validate number of logs"
 
+    # Validate number of connections
+    try:
+        no_connections = int(no_connections_str)
+    except (TypeError, ValueError):
+        return "Error: Invalid number of logs provided."
+    
     # Parse timestamp
     timestamp = parse_timestamp(timestamp_str)
     if not timestamp:
@@ -122,10 +127,6 @@ def handle_netflow_logs(request):
     logs = netflow_gsl(timestamp, source_ip, destination_ip, source_port, destination_port, no_connections, time_period)
     netflow_sl(logs)
     return "Netflow Logs generated successfully!"
-
-
-
-
 
 # Function to handle quick generation of SSH logs
 def generate_ssh_logs_quick():

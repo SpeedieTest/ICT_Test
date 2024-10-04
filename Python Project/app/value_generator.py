@@ -62,6 +62,41 @@ def generate_random_ip(external_chance=0.1):
     else:
         return f"192.168.{random.randint(0, 255)}.{random.randint(0, 255)}"
 
+#function to randomly generate cidr ending
+def generate_random_cidr():
+    key = random.randint(1,4)
+    if key == 1:
+        return ""
+    if key == 2:
+        return "/8"
+    if key == 3:
+        return "/16"
+    if key == 4:
+        return "/24"
+
+#function that generates a list of random ip addresses
+# external = 1 if external
+def generate_random_addresses(no_addresses: int, external: int):
+    addresses = []
+    for _ in range(no_addresses + 1):
+        addresses.append(generate_random_ip(external))
+
+    return addresses
+
+#function to generate random avaliable port number
+def generate_random_port():
+    # List of common standard ports to exclude
+    standard_ports = {80, 443, 8080, 21, 22, 25, 110, 143, 3306, 3389, 53, 23}
+    
+    while True:
+        # Generate a random port between 1024 and 65535 (excluding well-known system ports below 1024)
+        port = random.randint(1024, 65535)
+        
+        # Ensure the port is not in the list of standard ports
+        if port not in standard_ports:
+            return port
+
+
 # Function to generate random event outcome (success or fail)
 def generate_random_event_outcome():
     return random.choice(["success", "fail"])
