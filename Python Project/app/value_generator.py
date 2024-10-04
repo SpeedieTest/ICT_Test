@@ -76,10 +76,10 @@ def generate_random_cidr():
 
 #function that generates a list of random ip addresses
 # external = 1 if external
-def generate_random_addresses(no_addresses: int, external: int):
+def generate_random_addresses(no_addresses: int):
     addresses = []
     for _ in range(no_addresses + 1):
-        addresses.append(generate_random_ip(external))
+        addresses.append(generate_random_ip())
 
     return addresses
 

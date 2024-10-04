@@ -106,7 +106,6 @@ def handle_netflow_logs(request):
     source_port = request.form.get('netflow_sourceport')
     destination_port = request.form.get('netflow_destinationport')
     no_connections_str = request.form.get('netflow_numberofconnections')
-    time_period = request.form.get('netflow_timeperiodinminutes')
 
     #speedie needs to convert from sting to
     #mine should work but no quarantee
