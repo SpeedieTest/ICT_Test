@@ -28,7 +28,7 @@ def generate_daily_activity_logs():
     # Generate random log values
     source_port = generate_random_port()
     destination_port = generate_random_port()
-    no_connections = random.randint(1, 254)
+    no_connections = random.randint(100, 254)
     timestamp = generate_random_timestamp()
 
     #generate array of ips at random
@@ -49,7 +49,7 @@ def generate_daily_activity_logs():
     destination_ip = generate_random_ip(0)
     destination_port = 8080
     
-    logs.extend(generate_synthetic_logs(attack_time, source_ip, destination_ip, source_port, destination_port, no_connections, 1440))
+    logs.extend(generate_synthetic_logs(attack_time, source_ip, destination_ip, source_port, destination_port, no_connections))
         
     # Sort logs by timestamp
     logs.sort(key=lambda x: x[0])

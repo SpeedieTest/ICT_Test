@@ -107,10 +107,6 @@ def handle_netflow_logs(request):
     destination_port = request.form.get('netflow_destinationport')
     no_connections_str = request.form.get('netflow_numberofconnections')
 
-    #speedie needs to convert from sting to
-    #mine should work but no quarantee
-    #if not working look at line 86 "validate number of logs"
-
     # Validate number of connections
     try:
         no_connections = int(no_connections_str)
@@ -122,18 +118,18 @@ def handle_netflow_logs(request):
     if not timestamp:
         return "Error: Invalid timestamp format.", 400
 
-    # Generate and save SSH logs
-    logs = netflow_gsl(timestamp, source_ip, destination_ip, source_port, destination_port, no_connections, time_period)
+    # Generate and save netflow logs
+    logs = netflow_gsl(timestamp, source_ip, destination_ip, source_port, destination_port, no_connections)
     netflow_sl(logs)
     return "Netflow Logs generated successfully!"
 
-# Function to handle quick generation of SSH logs
+# Function to handle quick generation of netflow logs
 def generate_ssh_logs_quick():
     logs = ssh_dal()  # Call the function that generates daily SSH activity logs
     ssh_sl(logs)  # Save the logs
     return "Daily network activity logs generated successfully!"
 
 def generate_netflow_logs_quick():
-    logs = netflow_dal()  # Call the function that generates daily SSH activity logs
+    logs = netflow_dal()  # Call the function that generates daily netflow activity logs
     netflow_sl(logs)  # Save the logs
     return "Daily network activity logs generated successfully!"
