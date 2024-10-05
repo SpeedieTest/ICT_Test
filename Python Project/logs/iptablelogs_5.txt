@@ -1,1 +1,0 @@
-Oct 05 16:44:56 testhostname iptables: IN=eth0 OUT=eth0 SRC=192.168.1.22 DST=198.243.17.34 LEN=5000 SPT=5065 DPT=403

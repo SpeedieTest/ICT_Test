@@ -16,17 +16,28 @@ def generate_iptables_logs(start_timestamp, host_name, source_ip, source_port, d
 # Generate 10 random iptables logs
 def generate_random_iptables_logs():
     logs = []
-
     for _ in range(10):
-        # Generate each random value and assign to a variable
-        random_timestamp = generate_random_timestamp()
-        source_ip = generate_random_ip()
-        destination_ip = generate_random_ip()
-        host_name = generate_random_hostname()
-        source_port = generate_random_port()
-        destination_port = generate_random_port()
-        packet_length = generate_random_packet_length()
-        logs.extend(generate_iptables_logs(random_timestamp, host_name, source_ip, source_port, destination_ip, destination_port, packet_length))
+        # random chance for malicious log file
+        if random.random() < 0.2:
+            # adjust values to be indicitive of a malicious log
+            random_timestamp = generate_random_timestamp()
+            source_ip = f"192.168.{random.randint(0, 255)}.{random.randint(0, 255)}"
+            destination_ip = f"{random.randint(1, 255)}.{random.randint(1, 255)}.{random.randint(1, 255)}.{random.randint(1, 255)}"
+            host_name = generate_random_hostname()
+            source_port = generate_random_port()
+            destination_port = f"8080" # 8080 typically used as malicious port
+            packet_length = f"{random.randint(50000, 65535)}"
+            logs.extend(generate_iptables_logs(random_timestamp, host_name, source_ip, source_port, destination_ip, destination_port, packet_length))
+        else:
+            # Generate each random value and assign to a variable
+            random_timestamp = generate_random_timestamp()
+            source_ip = generate_random_ip()
+            destination_ip = generate_random_ip()
+            host_name = generate_random_hostname()
+            source_port = generate_random_port()
+            destination_port = generate_random_port()
+            packet_length = generate_random_packet_length()
+            logs.extend(generate_iptables_logs(random_timestamp, host_name, source_ip, source_port, destination_ip, destination_port, packet_length))
 
     # Sort logs by timestamp
     logs.sort(key=lambda x: x[0])
