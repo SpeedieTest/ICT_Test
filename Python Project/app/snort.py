@@ -56,29 +56,30 @@ def generate_random_malicious_path():
 def generate_random_snort_logs():
     logs = []
     for _ in range(10):
-            # Generate each random value and assign to a variable
-            random_timestamp = generate_random_timestamp()
-            host_name = generate_random_hostname()
-            file_hash = generate_random_sha256_hash()
-            source_ip = generate_random_ip()
-            source_port = generate_random_port()
-            file_type = generate_random_file_type()
-            file_type_suffix_map = {
-            "/xdosexec/": "exe",
-            "/xpython/": "py",
-            "/plain/": "txt",
-            "/mp4/": "mp4",
-            "/json/": "json",
-            "/csv/": "csv",
-            "/zip/": "zip",
-            "/gif/": "gif",
-            "/pdf/": "pdf"
-            }
-            file_type_suffix = file_type_suffix_map.get(file_type.strip, "unknown")
-            file_name = f"file_{random.randint(1, 100)}.{file_type_suffix}"
-            file_size = f"{random.randint(10000, 1000000)}"
-            file_path = generate_random_malicious_path() + file_name
-            logs.extend(generate_snort_logs(random_timestamp, host_name, file_hash, source_ip, source_port, file_name, file_size, file_type, file_path))
+            if random.random() < 0.05:
+                # Generate each random value and assign to a variable
+                random_timestamp = generate_random_timestamp()
+                host_name = generate_random_hostname()
+                file_hash = generate_random_sha256_hash()
+                source_ip = generate_random_ip()
+                source_port = generate_random_port()
+                file_type = generate_random_file_type()
+                file_type_suffix_map = {
+                "/xdosexec/": "exe",
+                "/xpython/": "py",
+                "/plain/": "txt",
+                "/mp4/": "mp4",
+                "/json/": "json",
+                "/csv/": "csv",
+                "/zip/": "zip",
+                "/gif/": "gif",
+                "/pdf/": "pdf"
+                }
+                file_type_suffix = file_type_suffix_map.get(file_type.strip, "unknown")
+                file_name = f"file_{random.randint(1, 100)}.{file_type_suffix}"
+                file_size = f"{random.randint(10000, 1000000)}"
+                file_path = generate_random_malicious_path() + file_name
+                logs.extend(generate_snort_logs(random_timestamp, host_name, file_hash, source_ip, source_port, file_name, file_size, file_type, file_path))
 
     # Sort logs by timestamp
     logs.sort(key=lambda x: x[0])
