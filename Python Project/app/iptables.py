@@ -49,9 +49,9 @@ def save_logs(logs):
     os.makedirs('logs', exist_ok=True)
     log_number = 1
     
-    while os.path.exists(f"logs/iptablelogs_{log_number}.txt"):
+    while os.path.exists(f"logs/iptableslogs_{log_number}.txt"):
         log_number += 1
-    log_filename = f"logs/iptablelogs_{log_number}.txt"
+    log_filename = f"logs/iptableslogs_{log_number}.txt"
 
     with open(log_filename, 'a') as file:
         for log in logs:
