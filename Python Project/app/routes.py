@@ -147,7 +147,6 @@ def generate_iptables_logs_quick():
 
 def handle_snort_logs (request):
     timestamp_str = request.form.get('snort_timestamp')
-    host_name = generate_random_hostname()
     file_hash = request.form.get('snort_filehash')
     source_ip = request.form.get('snort_sourceip')
     source_port = request.form.get('snort_sourceport')
