@@ -95,6 +95,6 @@ def handle_ssh_logs(request):
 
 # Function to handle quick generation of SSH logs
 def generate_ssh_logs_quick():
-    logs = ssh_dal()  # Call the function that generates daily SSH activity logs
+    logs = ssh_dal(0.1,0.8,0.2)  # Call the function that generates daily SSH activity logs
     ssh_sl(logs)  # Save the logs
     return "Daily network activity logs generated successfully!"

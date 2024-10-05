@@ -1,93 +1,82 @@
 import random
 from datetime import datetime, timedelta
 
-# Constants for business hours
-BUSINESS_HOURS_START = 9
-BUSINESS_HOURS_END = 18
-
-# List of 20 random usernames
+# List of usernames for log generation
 usernames = [
-    "alice", "bob", "charlie", "dave", "eve", "frank", "grace", "heidi", 
-    "ivan", "judy", "karen", "leo", "mallory", "nancy", "oscar", "peggy", 
-    "quentin", "rick", "steve", "trudy"
+    'alice', 'bob', 'charlie', 'dave', 'eve', 'frank', 'grace', 'heidi', 'ivan',
+    'judy', 'kate', 'leo', 'mallory', 'nick', 'olivia', 'peggy', 'quinn', 'roger', 
+    'steve', 'trudy'
 ]
 
-# List of 10 base source paths for files
+# List of hostnames
+hostnames = [
+    'server01', 'server02', 'backup-server', 'web-server', 'db-server', 
+    'auth-server', 'file-server', 'mail-server', 'ftp-server', 'proxy-server'
+]
+
+# List of base paths for source file paths
 base_paths = [
-    "/home/alice/documents", "/home/bob/work", "/var/log", "/usr/local/share", 
-    "/opt/data", "/mnt/storage", "/home/shared", "/srv/ftp", 
-    "/home/leo/files", "/var/www/html"
+    '/var/www/html/', '/usr/local/share/', '/etc/nginx/', '/home/user/documents/', 
+    '/opt/app/config/', '/srv/ftp/', '/mnt/data/', '/media/usb/', '/backup/', '/mnt/drive/',
+    '/home/alice', '/home/bob', '/var/log', '/opt/data', '/usr/share', '/etc/nginx', '/srv/ftp',
+    '/mnt/storage', '/tmp', '/var/tmp'
 ]
 
-# List of 5 common destination paths (for normal business activity)
-normal_destination_paths = [
-    "/home/alice/backup", "/srv/backup", "/mnt/nas", "/home/shared/reports", "/opt/backups"
+# List of destination paths for potential exfiltration or normal activity
+destination_paths = [
+    '/media/usb/', '/external_drive/', '/mnt/backup/', '/media/cdrom/', '/mnt/network_share/'
 ]
 
-# List of 2 destination paths for potential exfiltration
-exfiltration_destination_paths = [
-    "/media/usb", "/mnt/external_drive"
-]
-
-# Function to generate random username
+# Function to generate random usernames
 def generate_random_username():
     return random.choice(usernames)
 
-# Function to generate random file name
-def generate_random_filename():
-    return f"file_{random.randint(1, 100)}.txt"
-
-# Function to generate random source path
-def generate_random_source_path():
-    base_path = random.choice(base_paths)
-    return f"{base_path}/{generate_random_filename()}"
-
-# Function to generate random destination path (normal activity)
-def generate_random_destination_path():
-    return random.choice(normal_destination_paths)
-
-# Function to generate random destination path (exfiltration)
-def generate_random_exfiltration_path():
-    return random.choice(exfiltration_destination_paths)
-
 # Function to generate random hostnames
 def generate_random_hostname():
-    hostnames = ["server01", "server02", "db01", "web01", "app01", "file01", "backup01"]
     return random.choice(hostnames)
 
-# Function to generate random IP address (internal or external)
+# Function to generate a random IP address (internal/external based on probability)
 def generate_random_ip(external_chance=0.1):
     if random.random() < external_chance:
+        # Generate an external IP
         return f"{random.randint(1, 255)}.{random.randint(1, 255)}.{random.randint(1, 255)}.{random.randint(1, 255)}"
     else:
-        return f"192.168.{random.randint(0, 255)}.{random.randint(0, 255)}"
+        # Generate an internal IP (e.g., 192.168.x.x or 10.x.x.x)
+        internal_prefixes = ['192.168', '10']
+        selected_prefix = random.choice(internal_prefixes)
+        if selected_prefix == '192.168':
+            return f"192.168.{random.randint(0, 255)}.{random.randint(0, 255)}"
+        else:
+            return f"10.{random.randint(0, 255)}.{random.randint(0, 255)}.{random.randint(0, 255)}"
 
-# Function to generate random event outcome (success or fail)
+# Function to generate random file paths
+def generate_random_file_path():
+    return random.choice(base_paths) + f"file{random.randint(1, 100)}.txt"
+
+# Function to generate a random source path
+def generate_random_source_path():
+    return f"{random.choice(base_paths)}/file{random.randint(1, 100)}.txt"
+
+# Function to generate random destination path for exfiltration
+def generate_random_exfiltration_path():
+    return random.choice(destination_paths) + f"file{random.randint(1, 100)}.txt"
+
+# Function to generate random event outcome (success or fail) with 95% chance for success
 def generate_random_event_outcome():
-    return random.choice(["success", "fail"])
+    return random.choices(['success', 'fail'], weights=[95, 5], k=1)[0]
 
-# Function to generate a random timestamp
+# Helper function to generate a random timestamp during business hours or off hours
 def generate_random_timestamp(business_hours_chance=0.95):
-    if random.random() < business_hours_chance:
-        return generate_random_business_hours_time()
-    else:
-        return generate_random_off_hours_time()
-
-# Helper function to generate random time during business hours
-def generate_random_business_hours_time():
-    today = datetime.now().replace(hour=BUSINESS_HOURS_START, minute=0, second=0, microsecond=0)
-    random_hours = random.randint(0, BUSINESS_HOURS_END - BUSINESS_HOURS_START)
-    random_minutes = random.randint(0, 59)
-    random_seconds = random.randint(0, 59)
-    return today + timedelta(hours=random_hours, minutes=random_minutes, seconds=random_seconds)
-
-# Helper function to generate random time outside business hours
-def generate_random_off_hours_time():
+    BUSINESS_HOURS_START = 9
+    BUSINESS_HOURS_END = 18
     today = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
-    if random.random() < 0.5:
-        random_hours = random.randint(0, BUSINESS_HOURS_START - 1)
+
+    if random.random() < business_hours_chance:
+        random_hours = random.randint(BUSINESS_HOURS_START, BUSINESS_HOURS_END - 1)
     else:
-        random_hours = random.randint(BUSINESS_HOURS_END, 23)
+        random_hours = random.randint(0, 23)
+
     random_minutes = random.randint(0, 59)
     random_seconds = random.randint(0, 59)
+    
     return today + timedelta(hours=random_hours, minutes=random_minutes, seconds=random_seconds)
