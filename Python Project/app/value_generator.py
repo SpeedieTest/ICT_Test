@@ -91,3 +91,7 @@ def generate_random_off_hours_time():
     random_minutes = random.randint(0, 59)
     random_seconds = random.randint(0, 59)
     return today + timedelta(hours=random_hours, minutes=random_minutes, seconds=random_seconds)
+
+# Function to generate random port number
+def generate_random_port():
+    return f"{random.randInt(1024, 65535)}"
