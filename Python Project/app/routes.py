@@ -7,6 +7,9 @@ from .sshlogin import generate_daily_activity_logs as ssh_dal
 from .iptables import generate_iptables_logs as iptables_gsl
 from .iptables import save_logs as iptables_sl
 from .iptables import generate_random_iptables_logs as iptables_grl
+from .snort import generate_snort_logs as snort_gsl
+from .snort import save_logs as snort_sl
+from .snort import generate_random_snort_logs as snort_grl
 from .value_generator import generate_random_username, generate_random_hostname, generate_random_source_path, generate_random_destination_path
 
 @app.route('/')
@@ -95,4 +98,37 @@ def submit_form():
         iptables_sl(logs)
         return "Random iptables logs generated successfuly!"
     
+    # Check if the user selected snort (Option 5)
+    if 'manualGen' in request.form and request.form.get('dropdown') == 'option5':
+        timestamp_str = request.form.get('snort_timestamp')
+        host_name = generate_random_hostname()
+        file_hash = request.form.get('snort_filehash')
+        source_ip = request.form.get('snort_sourceip')
+        source_port = request.form.get('snort_sourceport')
+        file_name = request.form.get('snort_filename')
+        file_size = request.form.get('snort_filesize')
+        file_type = request.form.get('snort_filetype')
+        file_path = request.form.get('snort_filePath')
+
+    # Convert the timestamp
+        try:
+            start_timestamp = datetime.strptime(timestamp_str, '%Y-%m-%dT%H:%M:%S')
+        except ValueError:
+            return "Error: Invalid timestamp format.", 400
+        
+    # Generate iptables logs
+        logs = snort_gsl(start_timestamp, host_name, file_hash, source_ip, source_port, file_name, file_size, file_type, file_path)
+
+        # extract just the log message
+        log_messages = [log for _, log in logs]
+        # Save logs to a file
+        snort_sl(log_messages)
+
+        return "Snort Logs generated successfully!"  
+    
+    # Check if the user clicked on 'Quick Gen' button for Snort logs
+    if 'quickGen' in request.form and request.form.get('dropdown') == 'option5':
+        logs = snort_grl()
+        snort_sl(logs)
+        return "Random snort logs generated successfuly!"  
     return "No valid option selected!"

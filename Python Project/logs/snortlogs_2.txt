@@ -1,0 +1,1 @@
+Oct 10 16:27:42 web01 snort[6719]: [1:2023445:3] ET MALWARE Malicious File Detected via HTTP (SHA256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855) [Classification: Malware Detected] [Priority: 1] TCP SRC=192.168.1.50:50321 DST=236.61.45.116:80 FileName=malware.exe.exe FileSize=378234 FileType=/xdosexec/ URI=/malicious/malware.exe  Host=malicious-server.com
