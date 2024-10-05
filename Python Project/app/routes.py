@@ -4,6 +4,8 @@ from datetime import datetime
 from .sshlogin import generate_synthetic_logs as ssh_gsl
 from .sshlogin import save_logs as ssh_sl
 from .sshlogin import generate_daily_activity_logs as ssh_dal
+from .iptables import generate_iptables_logs as iptables_gsl
+from .iptables import save_logs as iptables_sl
 from .value_generator import generate_random_username, generate_random_hostname, generate_random_source_path, generate_random_destination_path
 
 @app.route('/')
@@ -59,5 +61,32 @@ def submit_form():
         logs = ssh_dal()
         ssh_sl(logs)
         return "Daily network activity logs generated successfully!"
+
+    # Check if the user selected iptables (Option 4)
+    if 'manualGen' in request.form and request.form.get('dropdown') == 'option4':
+        timestamp_str = request.form.get('iptables_timestamp')
+        host_name = request.form.get('iptables_hostName')
+        source_ip = request.form.get('iptables_sourceipaddr')
+        source_port = request.form.get('iptables_sourceport')
+        destination_ip = request.form.get('iptables_destinationipaddr')
+        destination_port = request.form.get('iptables_destinationport')
+        packet_length= request.form.get('iptables_packetlength')
+
+        # Convert the timestamp
+        try:
+            start_timestamp = datetime.strptime(timestamp_str, '%Y-%m-%dT%H:%M:%S')
+        except ValueError:
+            return "Error: Invalid timestamp format.", 400
+
+        # Generate iptables logs
+        logs = iptables_gsl(start_timestamp, host_name, source_ip, source_port, destination_ip, destination_port, packet_length)
+
+        # Save logs to a file
+        iptables_sl(logs)
+
+        return "iptables Logs generated successfully!"
+    
+    # Check if the user clicked on 'Quick Gen' button for iptables logs
+    #if 'quickGen' in request.form and request.form.get('dropdown') == 'option4':
 
     return "No valid option selected!"
