@@ -94,4 +94,8 @@ def generate_random_off_hours_time():
 
 # Function to generate random port number
 def generate_random_port():
-    return f"{random.randInt(1024, 65535)}"
+    return random.randint(1024, 65535)
+
+# Function to generate random packet length
+def generate_random_packet_length():
+    return f"{random.randint(21, 65535)}"

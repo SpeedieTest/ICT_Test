@@ -1,5 +1,7 @@
 import os
+import random
 from datetime import datetime, timedelta
+from .value_generator import (generate_random_username, generate_random_ip, generate_random_hostname, generate_random_event_outcome, generate_random_timestamp, generate_random_port, generate_random_packet_length)
 
 def generate_iptables_logs(start_timestamp, host_name, source_ip, source_port, destination_ip, destination_port, packet_length):
     logs = []
@@ -11,6 +13,26 @@ def generate_iptables_logs(start_timestamp, host_name, source_ip, source_port, d
 
     return logs
     
+# Generate 10 random iptables logs
+def generate_random_iptables_logs():
+    logs = []
+
+    for _ in range(10):
+        # Generate each random value and assign to a variable
+        random_timestamp = generate_random_timestamp()
+        source_ip = generate_random_ip()
+        destination_ip = generate_random_ip()
+        host_name = generate_random_hostname()
+        source_port = generate_random_port()
+        destination_port = generate_random_port()
+        packet_length = generate_random_packet_length()
+        logs.extend(generate_iptables_logs(random_timestamp, host_name, source_ip, source_port, destination_ip, destination_port, packet_length))
+
+    # Sort logs by timestamp
+    logs.sort(key=lambda x: x[0])
+
+    # Extract just the log messages, discarding the timestamp
+    return [log for _, log in logs]
 
 def save_logs(logs):
     os.makedirs('logs', exist_ok=True)
@@ -20,6 +42,6 @@ def save_logs(logs):
         log_number += 1
     log_filename = f"logs/iptablelogs_{log_number}.txt"
 
-    with open(log_filename, 'w') as file:
-        for _, log in logs:
+    with open(log_filename, 'a') as file:
+        for log in logs:
             file.write(log + '\n')

@@ -6,6 +6,7 @@ from .sshlogin import save_logs as ssh_sl
 from .sshlogin import generate_daily_activity_logs as ssh_dal
 from .iptables import generate_iptables_logs as iptables_gsl
 from .iptables import save_logs as iptables_sl
+from .iptables import generate_random_iptables_logs as iptables_grl
 from .value_generator import generate_random_username, generate_random_hostname, generate_random_source_path, generate_random_destination_path
 
 @app.route('/')
@@ -81,12 +82,17 @@ def submit_form():
         # Generate iptables logs
         logs = iptables_gsl(start_timestamp, host_name, source_ip, source_port, destination_ip, destination_port, packet_length)
 
+        # extract just the log message
+        log_messages = [log for _, log in logs]
         # Save logs to a file
-        iptables_sl(logs)
+        iptables_sl(log_messages)
 
         return "iptables Logs generated successfully!"
     
     # Check if the user clicked on 'Quick Gen' button for iptables logs
-    #if 'quickGen' in request.form and request.form.get('dropdown') == 'option4':
-
+    if 'quickGen' in request.form and request.form.get('dropdown') == 'option4':
+        logs = iptables_grl()
+        iptables_sl(logs)
+        return "Random iptables logs generated successfuly!"
+    
     return "No valid option selected!"
