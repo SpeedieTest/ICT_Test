@@ -2,9 +2,7 @@ from flask import render_template, request
 from app import app
 from datetime import datetime
 # SSH Imports
-from .sshlogin import generate_synthetic_logs as ssh_gsl
-from .sshlogin import save_logs as ssh_sl
-from .sshlogin import generate_daily_activity_logs as ssh_dal
+from .sshlogin import generate_single_sshlog, save_ssh_logs, auto_generate_ssh_logs
 # iptables Imports
 from .iptables import generate_iptables_logs as iptables_gsl
 from .iptables import save_logs as iptables_sl
@@ -103,15 +101,15 @@ def handle_ssh_logs(request):
         return "Error: Invalid timestamp format.", 400
 
     # Generate and save SSH logs
-    logs = ssh_gsl(start_timestamp, host_name, source_ip, user_acc, event_outcome, num_logs)
-    ssh_sl(logs)
+    logs = generate_single_sshlog(start_timestamp, host_name, source_ip, user_acc, event_outcome, num_logs)
+    save_ssh_logs(logs)
 
     return "SSH Logs generated successfully!"
 
 # Function to handle quick generation of SSH logs
 def generate_ssh_logs_quick():
-    logs = ssh_dal()  # Call the function that generates daily SSH activity logs
-    ssh_sl(logs)  # Save the logs
+    logs = auto_generate_ssh_logs(0.1,0.8,0.2)  # Generate daily SSH activity logs
+    save_ssh_logs(logs)  # Save the logs
     return "Daily network activity logs generated successfully!"
 
 def handle_iptables_logs (request):
