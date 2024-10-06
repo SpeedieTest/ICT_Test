@@ -1,10 +1,6 @@
 # want mix of ip addresses to simulate network traffic
 # different internal and external
-# eg: source or destination is required to be internal and other one could be internal or external
-# eg: defined external address for lets say, web server, would have normal activityy but theres 50% chance that a beacon attack occurs where from certain timestamp, the same log should run every hour 
-# still needs to generate normal network activity alongside the malicious attack
-# fix destination ip for normal network activity to not be a hardcoded value (should be a range of internal ip addresses in a subnet to look somewhat normal)
-# needs to generate more than 24 logs, maybe 240?
+# eg: source or destination is required to be internal and other one could be internal or external 
 
 import os
 import random
@@ -21,8 +17,8 @@ def generate_iptables_logs(start_timestamp, host_name, source_ip, source_port, d
 
     return logs
 
-BUSINESS_HOURS_START = 9  # 9 AM
-BUSINESS_HOURS_END = 17    # 5 PM
+BUSINESS_HOURS_START = 9
+BUSINESS_HOURS_END = 17
 
 def generate_random_iptables_logs():
     logs = []
@@ -75,7 +71,7 @@ def generate_random_iptables_logs():
     for _ in range(250):  # Amount of normal logs that are generated
         timestamp = generate_random_timestamp()
         source_ip = generate_random_ip()
-        destination_ip = "8.8.8.8"
+        destination_ip = f"192.168.{random.randint(0, 255)}.{random.randint(0, 255)}" # random internal ip address for company
         host_name = generate_random_hostname()
         source_port = generate_random_port()
         destination_port = "80"
