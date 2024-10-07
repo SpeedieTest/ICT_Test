@@ -4,11 +4,9 @@ from datetime import datetime
 from .sshlogin import generate_synthetic_logs as ssh_gsl
 from .sshlogin import save_logs as ssh_sl
 from .sshlogin import generate_daily_activity_logs as ssh_dal
-from .netflow import generate_synthetic_logs as netflow_gsl
-from .netflow import save_logs as netflow_sl
-from .netflow import generate_daily_activity_logs as netflow_dal
+from .netflow import generate_single_netflowlog, save_netflow_logs, auto_generate_netflow_logs
 
-from .value_generator import generate_random_username, generate_random_hostname, generate_random_source_path, generate_random_destination_path
+from .value_generator import generate_random_username, generate_random_hostname, generate_random_source_path
 
 @app.route('/')
 @app.route('/index')
@@ -99,29 +97,34 @@ def handle_ssh_logs(request):
 
     return "SSH Logs generated successfully!"
 
+# Handle NetFlow log generation
 def handle_netflow_logs(request):
     timestamp_str = request.form.get('netflow_timestamp')
-    source_ip = request.form.get('netflow_sourceip')
-    destination_ip = request.form.get('netflow_destinationip')
-    source_port = request.form.get('netflow_sourceport')
-    destination_port = request.form.get('netflow_destinationport')
-    no_connections_str = request.form.get('netflow_numberofconnections')
+    src_ip = request.form.get('netflow_sourceip')
+    dst_ip = request.form.get('netflow_destinationip')
+    src_port = request.form.get('netflow_sourceport')
+    dst_port = request.form.get('netflow_destinationport')
+    numb_connections_str = request.form.get('netflow_numberofconnections')
+    time_period_str = request.form.get('netflow_timeperiodinminutes')
 
-    # Validate number of connections
-    try:
-        no_connections = int(no_connections_str)
-    except (TypeError, ValueError):
-        return "Error: Invalid number of logs provided."
-    
     # Parse timestamp
     timestamp = parse_timestamp(timestamp_str)
     if not timestamp:
         return "Error: Invalid timestamp format.", 400
 
-    # Generate and save netflow logs
-    logs = netflow_gsl(timestamp, source_ip, destination_ip, source_port, destination_port, no_connections)
-    netflow_sl(logs)
-    return "Netflow Logs generated successfully!"
+    # Validate input ports and connections
+    try:
+        src_port = int(src_port)
+        dst_port = int(dst_port)
+        numb_connect = int(numb_connections_str)
+        time_period = int(time_period_str)
+    except (ValueError, TypeError):
+        return "Error: Invalid source or destination port.", 400
+
+    logs = generate_single_netflowlog(timestamp, src_ip, dst_ip, src_port, dst_port, numb_connect, time_period)
+    save_netflow_logs(logs)
+
+    return "NetFlow log generated successfully!"
 
 # Function to handle quick generation of netflow logs
 def generate_ssh_logs_quick():
@@ -130,6 +133,6 @@ def generate_ssh_logs_quick():
     return "Daily network activity logs generated successfully!"
 
 def generate_netflow_logs_quick():
-    logs = netflow_dal()  # Call the function that generates daily netflow activity logs
-    netflow_sl(logs)  # Save the logs
-    return "Daily network activity logs generated successfully!"
+    logs = auto_generate_netflow_logs(0.1,0.05)
+    save_netflow_logs(logs)
+    return "Daily netflow logs generated successfully!"
