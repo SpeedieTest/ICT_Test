@@ -1,91 +1,68 @@
-# want mix of ip addresses to simulate network traffic
-# different internal and external
-# eg: source or destination is required to be internal and other one could be internal or external 
-
 import os
 import random
 from datetime import datetime, timedelta
 from .value_generator import (generate_random_username, generate_random_ip, generate_random_hostname, generate_random_event_outcome, generate_random_timestamp, generate_random_port, generate_random_packet_length)
 
-def generate_iptables_logs(start_timestamp, host_name, source_ip, source_port, destination_ip, destination_port, packet_length):
+def generate_iptables_logs(start_timestamp, host_name, source_ip, destination_ip, source_port, destination_port, packet_length):
     logs = []
     formatted_timestamp = start_timestamp.strftime('%b %d %H:%M:%S')
 
-    log = f"{formatted_timestamp} {host_name} iptables: IN=eth0 OUT=eth0 SRC={source_ip} DST={destination_ip} LEN={packet_length} TOS=0x00 PREC=0x00 TTL=64 ID=54324 DF PROTO=TCP SPT={source_port} DPT={destination_port} WINDOW=65535 RES=0x00 ACK URGP=0"
+    # Other constants for the log
+    IN_INTERFACE = "eth0"  # Example interface like 'eth0'
+    OUT_INTERFACE = "eth1"  # Example interface like 'eth1'
+    TOS = "0x00"
+    PREC = "0x00"
+    TTL = "64"
+    ID = str(random.randint(10000, 60000))  # Random ID
+    PROTO = "TCP"
+    WINDOW = "65535"
+    RES = "0x00"
+    FLAGS = "ACK"
+    URGP = "0"
+
+    # Creating the log in the desired format
+    log = f"{formatted_timestamp} {host_name} iptables: IN={IN_INTERFACE} OUT={OUT_INTERFACE} SRC={source_ip} DST={destination_ip} LEN={packet_length} TOS={TOS} PREC={PREC} TTL={TTL} ID={ID} DF PROTO={PROTO} SPT={source_port} DPT={destination_port} WINDOW={WINDOW} RES={RES} {FLAGS} URGP={URGP}"
     
     logs.append((start_timestamp, log))
 
     return logs
 
-BUSINESS_HOURS_START = 9
-BUSINESS_HOURS_END = 17
 
 def generate_random_iptables_logs():
     logs = []
-    # Ensure that the logs start generating atleast before the start of the day for realism xD
-    random_hour = random.randint(0, 8)  
-    random_minute = random.randint(0, 59)
-    
-    # Set the start time to a random time of the day
-    start_time = datetime.now().replace(hour=random_hour, minute=random_minute, second=0, microsecond=0)
+    company_external_ip = "198.26.177.2" # Example external company IP
+    potential_c2_server = f"{random.randint(1, 255)}.{random.randint(1, 255)}.{random.randint(1, 255)}.{random.randint(1, 255)}" #generate_random_external_ip() 
+    c2_attack_chance = 0.05 
 
-    # Variables to hold the current values for malicious logs
-    current_source_ip = None
-    current_destination_ip = None
-    current_host_name = None
-    current_source_port = None
-    current_destination_port = None
-    current_packet_length = None
-    initial_malicious_timestamp = start_time  # Use the random start time
-
-    # Set the end of the malicious log generation to 11:59 PM of the same day
-    end_of_day = initial_malicious_timestamp.replace(hour=23, minute=59, second=59)
-
-    while initial_malicious_timestamp <= end_of_day:
-        # If it's a malicious log, use the previously set values
-        if current_source_ip is None:
-            # Generate values for the first malicious log entry
-            source_ip = f"192.168.{random.randint(0, 255)}.{random.randint(0, 255)}"
-            destination_ip = f"{random.randint(1, 255)}.{random.randint(1, 255)}.{random.randint(1, 255)}.{random.randint(1, 255)}"
-            host_name = generate_random_hostname()
-            source_port = generate_random_port()
-            destination_port = "8080"  # 8080 typically used as a malicious port
-            packet_length = f"{random.randint(50000, 65535)}"
-
-            # Save these values for future use
-            current_source_ip = source_ip
-            current_destination_ip = destination_ip
-            current_host_name = host_name
-            current_source_port = source_port
-            current_destination_port = destination_port
-            current_packet_length = packet_length
-
-        # Use the timestamp for the malicious log
-        timestamp = initial_malicious_timestamp
-        logs.extend(generate_iptables_logs(timestamp, current_host_name, current_source_ip, current_source_port, current_destination_ip, current_destination_port, current_packet_length))
-        
-        # Increment the timestamp by one hour for the next malicious log entry
-        initial_malicious_timestamp += timedelta(hours=1)
-
-    # Generate random normal logs for other times of the day
-    for _ in range(250):  # Amount of normal logs that are generated
+    # 198.26.177.2Generate random normal logs for other times of the day
+    for _ in range(100):  # Amount of normal logs that are generated
         timestamp = generate_random_timestamp()
         source_ip = generate_random_ip()
-        destination_ip = f"192.168.{random.randint(0, 255)}.{random.randint(0, 255)}" # random internal ip address for company
+        destination_ip = f"{random.randint(1, 255)}.{random.randint(1, 255)}.{random.randint(1, 255)}.{random.randint(1, 255)}" #generate_random_external_ip() 
         host_name = generate_random_hostname()
+
+        # 80% chance of internal IP connecting to external company IP, 20% chance for other external IP
+        if random.random() < 0.8:
+            destination_ip = company_external_ip
+
         source_port = generate_random_port()
-        destination_port = "80"
-        packet_length = generate_random_packet_length()
+        destination_port = generate_random_port()
+        packet_length = random.randint(40, 1500)
 
-        logs.extend(generate_iptables_logs(timestamp, host_name, source_ip, source_port, destination_ip, destination_port, packet_length))
+        logs.extend(generate_iptables_logs(timestamp, host_name, source_ip, destination_ip, source_port, destination_port, packet_length))
 
+        # Check for C2 connection (internal IP trying to connect to external C2 server)
+        if source_ip.startswith('192.168') or source_ip.startswith('10'):  # Ensure source is internal
+            if random.random() < c2_attack_chance:
+                # Log repeated at the same time for each hour the rest of the day
+                for _ in range(23):  # Assuming the day starts at the initial timestamp
+                    timestamp += timedelta(hours=1)
+                    logs.extend(generate_iptables_logs(timestamp, host_name, source_ip, potential_c2_server, source_port, destination_port, packet_length))
     # Sort logs by timestamp
     logs.sort(key=lambda x: x[0])
 
     # Extract just the log messages, discarding the timestamp
     return [log for _, log in logs]
-
-
 
 def save_logs(logs):
     os.makedirs('logs', exist_ok=True)
@@ -95,6 +72,6 @@ def save_logs(logs):
         log_number += 1
     log_filename = f"logs/iptableslogs_{log_number}.txt"
 
-    with open(log_filename, 'a') as file:
+    with open(log_filename, 'w') as file:
         for log in logs:
             file.write(log + '\n')
