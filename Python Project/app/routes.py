@@ -10,8 +10,8 @@ from .iptables import generate_random_iptables_logs as iptables_grl
 # Snort Imports
 from .snort import generate_snort_logs as snort_gsl
 from .snort import save_logs as snort_sl
-from .snort import generate_random_snort_logs as snort_grl
-from .value_generator import generate_random_username, generate_random_hostname, generate_random_source_path, generate_random_destination_path
+from .snort import auto_generate_snort_logs
+from .value_generator import generate_random_username, generate_random_hostname, generate_random_source_path
 
 @app.route('/')
 @app.route('/index')
@@ -170,6 +170,6 @@ def handle_snort_logs (request):
     return "Snort Logs generated successfully!"
 
 def generate_snort_logs_quick():
-    logs = snort_grl()
+    logs = auto_generate_snort_logs(0.05)
     snort_sl(logs)
     return "Random snort logs generated successfuly!"  

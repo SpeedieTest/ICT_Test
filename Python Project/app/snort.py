@@ -2,18 +2,18 @@ import os
 import random
 import hashlib
 from datetime import datetime, timedelta
-from .value_generator import (generate_random_username, generate_random_ip, generate_random_hostname, generate_random_event_outcome, generate_random_timestamp, generate_random_port, generate_random_packet_length, generate_random_source_path, base_paths)
+from .value_generator import (generate_random_filename, generate_random_internal_ip, generate_random_timestamp, base_paths, generate_random_external_ip, generate_random_host, generate_random_filehash, generate_random_filepath)
 
 def generate_snort_logs(start_timestamp, file_hash, source_ip, source_port, file_name, file_size, file_type, filepath):
     logs = []
     formatted_timestamp = start_timestamp.strftime('%b %d %H:%M:%S')
-    destination_ip = f"{random.randint(1, 255)}.{random.randint(1, 255)}.{random.randint(1, 255)}.{random.randint(1, 255)}" # generate_random_external_ip()
+    destination_ip = generate_random_external_ip()
     destination_port = 80
     uri = filepath+file_name
-    #host = generate_random_host()
+    host = generate_random_host()
     process_id = random.randint(1000, 9999)
 
-    log = f"{formatted_timestamp} IDS-Server snort[{process_id}]: [1:{random.randint(1000000, 2000000)}:3] ET MALWARE Malicious File Detected via HTTP (SHA256:{file_hash}) [Classification: Malware Detected] [Priority: 1] {{TCP}} SRC={source_ip}:{source_port} DST={destination_ip}:{destination_port} FileName={file_name} FileSize={file_size} FileType={file_type} URI={uri} Host=malicious-server.com" #host = generate_random_host()
+    log = f"{formatted_timestamp} IDS-Server snort[{process_id}]: [1:{random.randint(1000000, 2000000)}:3] ET MALWARE Malicious File Detected via HTTP (SHA256:{file_hash}) [Classification: Malware Detected] [Priority: 1] {{TCP}} SRC={source_ip}:{source_port} DST={destination_ip}:{destination_port} FileName={file_name} FileSize={file_size} FileType={file_type} URI={uri} Host={host}"
     logs.append((start_timestamp, log))
 
     return logs
@@ -40,39 +40,44 @@ def generate_random_malicious_path():
     return f"{base_path}/"
 
 # Generate 10 random snort logs
-def generate_random_snort_logs():
+def auto_generate_snort_logs(malware_event_chance):
     logs = []
     num_logs = random.randint(10, 30)  # A small company might see 10-30 logs per day
 
     for _ in range(num_logs):
                 # Generate each random value and assign to a variable
                 random_timestamp = generate_random_timestamp()
-                file_hash = generate_random_sha256_hash() # generate_random_filehash(), then can remove above code?
-                source_ip = f"192.168.{random.randint(0, 255)}.{random.randint(0, 255)}" # generate_random_internal_ip()
+                file_hash = generate_random_filehash()
+                source_ip = generate_random_internal_ip()
+                destination_ip = generate_random_external_ip()
                 source_port = random.randint(1024, 65535)
+                destination_port = 80
                 file_type = random.choice(['/xdosexec/', '/xpython/', '/plain/', '/mp4/', '/json/', '/csv/', '/zip/', '/gif/', '/pdf/'])
-                file_name = f"file_{random.randint(1, 100)}" # generate_random_filename()
+                file_name = generate_random_filename()
                 file_size = f"{random.randint(10000, 1000000)}"
-                file_path = generate_random_malicious_path() + file_name # uri = generate_random_uri()
-                # host = generate_random_host()
+                uri = generate_random_filepath()+'/'+file_name
+                host = generate_random_host()
 
-                        # Event type logic based on realistic expectations for a small company
-                event_type = random.choices(
-                    ['ET SCAN', 'ET MALWARE', 'ET POLICY', 'ET WEB'],
-                    weights=[70, 10, 15, 5],  # Most events are scan, rare malware detections
-                    k=1
+                 # Event type logic based on realistic expectations for a small company
+                if random.random() < malware_event_chance:
+                    event_type = 'ET MALWARE'
+                else:
+                    event_type = random.choices(
+                ['ET SCAN', 'ET POLICY', 'ET WEB'],
+                weights=[70, 20, 10],  # Most events are scan, rare malware detections
+                k=1
                 )[0]
 
                 if event_type == 'ET SCAN':
-                    log = f"{timestamp.strftime('%b %d %H:%M:%S')} IDS-Server snort[{random.randint(1000, 9999)}]: [1:{random.randint(1000000, 2000000)}:1] ET SCAN Suspicious Traffic Detected from {src_ip} to {dst_ip} [Classification: Misc activity] [Priority: 3] {{TCP}} SRC={src_ip}:{src_port} DST={dst_ip}:{dst_port}"
+                    log = f"{random_timestamp.strftime('%b %d %H:%M:%S')} IDS-Server snort[{random.randint(1000, 9999)}]: [1:{random.randint(1000000, 2000000)}:1] ET SCAN Suspicious Traffic Detected from {source_ip} to {destination_ip} [Classification: Misc activity] [Priority: 3] {{TCP}} SRC={source_ip}:{source_port} DST={destination_ip}:{destination_port}"
                 elif event_type == 'ET MALWARE':
-                    log = f"{timestamp.strftime('%b %d %H:%M:%S')} IDS-Server snort[{random.randint(1000, 9999)}]: [1:{random.randint(1000000, 2000000)}:3] ET MALWARE Malicious File Detected via HTTP (SHA256: {filehash}) [Classification: Malware Detected] [Priority: 1] {{TCP}} SRC={src_ip}:{src_port} DST={dst_ip}:{dst_port} FileName={filename} FileSize={filesize} FileType={filetype} URI={uri} Host={host}"
+                    log = f"{random_timestamp.strftime('%b %d %H:%M:%S')} IDS-Server snort[{random.randint(1000, 9999)}]: [1:{random.randint(1000000, 2000000)}:3] ET MALWARE Malicious File Detected via HTTP (SHA256: {file_hash}) [Classification: Malware Detected] [Priority: 1] {{TCP}} SRC={source_ip}:{source_port} DST={destination_ip}:{destination_port} FileName={file_name} FileSize={file_size} FileType={file_type} URI={uri} Host={host}"
                 elif event_type == 'ET POLICY':
-                    log = f"{timestamp.strftime('%b %d %H:%M:%S')} IDS-Server snort[{random.randint(1000, 9999)}]: [1:{random.randint(1000000, 2000000)}:2] ET POLICY Possible Policy Violation detected between {src_ip} and {dst_ip} [Classification: Potential Corporate Policy Violation] [Priority: 2] {{TCP}} SRC={src_ip}:{src_port} DST={dst_ip}:{dst_port}"
+                    log = f"{random_timestamp.strftime('%b %d %H:%M:%S')} IDS-Server snort[{random.randint(1000, 9999)}]: [1:{random.randint(1000000, 2000000)}:2] ET POLICY Possible Policy Violation detected between {source_ip} and {destination_ip} [Classification: Potential Corporate Policy Violation] [Priority: 2] {{TCP}} SRC={source_ip}:{source_port} DST={destination_ip}:{destination_port}"
                 else:
-                    log = f"{timestamp.strftime('%b %d %H:%M:%S')} IDS-Server snort[{random.randint(1000, 9999)}]: [1:{random.randint(1000000, 2000000)}:1] ET WEB HTTP traffic detected (SHA256: {filehash}) [Classification: Web traffic] [Priority: 3] {{TCP}} SRC={src_ip}:{src_port} DST={dst_ip}:{dst_port} URI={uri} Host={host}"
+                    log = f"{random_timestamp.strftime('%b %d %H:%M:%S')} IDS-Server snort[{random.randint(1000, 9999)}]: [1:{random.randint(1000000, 2000000)}:1] ET WEB HTTP traffic detected (SHA256: {file_hash}) [Classification: Web traffic] [Priority: 3] {{TCP}} SRC={source_ip}:{source_port} DST={destination_ip}:{destination_port} URI={uri} Host={host}"
 
-                logs.append((timestamp, log))
+                logs.append((random_timestamp, log))
 
     # Sort logs by timestamp
     logs.sort(key=lambda x: x[0])
