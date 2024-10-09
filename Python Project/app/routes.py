@@ -138,7 +138,7 @@ def handle_iptables_logs (request):
     return "iptables Logs generated successfully!"
 
 def generate_iptables_logs_quick():
-    logs = iptables_grl()
+    logs = iptables_grl(0.05)
     iptables_sl(logs)
     return "Random iptables logs generated successfuly!"
 
@@ -160,7 +160,7 @@ def handle_snort_logs (request):
         return "Error: Invalid timestamp format.", 400
     
     # Generate iptables logs
-    logs = snort_gsl(start_timestamp, host_name, file_hash, source_ip, source_port, file_name, file_size, file_type, file_path)
+    logs = snort_gsl(start_timestamp, file_hash, source_ip, source_port, file_name, file_size, file_type, file_path)
 
     # extract just the log message
     log_messages = [log for _, log in logs]

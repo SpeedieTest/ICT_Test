@@ -28,11 +28,10 @@ def generate_iptables_logs(start_timestamp, host_name, source_ip, destination_ip
     return logs
 
 
-def generate_random_iptables_logs():
+def generate_random_iptables_logs(c2_attack_chance):
     logs = []
     company_external_ip = "198.26.177.2" # Example external company IP
     potential_c2_server = generate_random_external_ip() 
-    c2_attack_chance = 0.05 
 
     # 198.26.177.2Generate random normal logs for other times of the day
     for _ in range(100):  # Amount of normal logs that are generated
