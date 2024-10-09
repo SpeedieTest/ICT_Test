@@ -99,18 +99,10 @@ def handle_ssh_logs(request):
 # Handle Syslog log generation
 def handle_syslog_logs(request):
     timestamp_str = request.form.get('syslog_timestamp')
-    host_name = request.form.get('syslog_hostName')
-    user_name = request.form.get('syslog_userName')
-    file_path = request.form.get('syslog_filePath')
-    file_name = request.form.get('syslog_fileName')
-    bash_id = request.form.get('syslog_bashID')
-    num_logs_str = request.form.get('syslog_NumLogs')
-
-    # Validate number of logs Syslog
-    try:
-        num_logs = int(num_logs_str)
-    except (TypeError, ValueError):
-        return "Error: Invalid number of logs provided.", 400
+    host_name = request.form.get('syslog_hostname')
+    user_name = request.form.get('syslog_username')
+    file_path = request.form.get('syslog_filepath')
+    file_name = request.form.get('syslog_filename')
 
     # Parse timestamp Syslog
     timestamp_ = parse_timestamp(timestamp_str)
@@ -118,10 +110,10 @@ def handle_syslog_logs(request):
         return "Error: Invalid timestamp format.", 400
 
     # Generate and save Syslog logs
-    logs = syslog_gsl(timestamp_, host_name, user_name, file_path, file_name, bash_id, num_logs)
+    logs = syslog_gsl(timestamp_, host_name, user_name, file_path, file_name)
     syslog_sl(logs)
 
-    return "SSH Logs generated successfully!"
+    return "Syslogs generated successfully!"
 
 # Function to handle quick generation of SSH logs
 def generate_ssh_logs_quick():
