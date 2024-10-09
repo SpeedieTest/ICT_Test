@@ -4,7 +4,9 @@ from datetime import datetime
 from .sshlogin import generate_synthetic_logs as ssh_gsl
 from .sshlogin import save_logs as ssh_sl
 from .sshlogin import generate_daily_activity_logs as ssh_dal
-from .value_generator import generate_random_username, generate_random_hostname, generate_random_source_path, generate_random_destination_path
+from .syslog import generate_synthetic_logs as syslog_gsl
+from .syslog import save_logs as syslog_sl
+from .value_generator import generate_random_username, generate_random_hostname, generate_random_source_path, generate_random_destination_path, generate_random_filename
 
 @app.route('/')
 @app.route('/index')
@@ -26,6 +28,7 @@ def submit_form():
     # Define a dictionary that maps log_type to the respective function calls
     manual_gen_switch = {
         'option1': handle_ssh_logs,
+        'option8': handle_syslog_logs,
     }
 
     quick_gen_switch = {
@@ -90,6 +93,33 @@ def handle_ssh_logs(request):
     # Generate and save SSH logs
     logs = ssh_gsl(start_timestamp, host_name, source_ip, user_acc, event_outcome, num_logs)
     ssh_sl(logs)
+
+    return "SSH Logs generated successfully!"
+
+# Handle Syslog log generation
+def handle_syslog_logs(request):
+    timestamp_str = request.form.get('syslog_timestamp')
+    host_name = request.form.get('syslog_hostName')
+    user_name = request.form.get('syslog_userName')
+    file_path = request.form.get('syslog_filePath')
+    file_name = request.form.get('syslog_fileName')
+    bash_id = request.form.get('syslog_bashID')
+    num_logs_str = request.form.get('syslog_NumLogs')
+
+    # Validate number of logs Syslog
+    try:
+        num_logs = int(num_logs_str)
+    except (TypeError, ValueError):
+        return "Error: Invalid number of logs provided.", 400
+
+    # Parse timestamp Syslog
+    timestamp_ = parse_timestamp(timestamp_str)
+    if not timestamp_:
+        return "Error: Invalid timestamp format.", 400
+
+    # Generate and save Syslog logs
+    logs = syslog_gsl(timestamp_, host_name, user_name, file_path, file_name, bash_id, num_logs)
+    syslog_sl(logs)
 
     return "SSH Logs generated successfully!"
 
