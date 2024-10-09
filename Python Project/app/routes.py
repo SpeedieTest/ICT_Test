@@ -3,7 +3,7 @@ from app import app
 from datetime import datetime
 # Import SSHlogin log creation.
 from .sshlogin import generate_single_sshlog, save_ssh_logs, auto_generate_ssh_logs
-
+from .filetransfer import generate_single_ftplog, save_ftp_logs
 @app.route('/')
 @app.route('/index')
 def index():
@@ -24,10 +24,12 @@ def submit_form():
     # Define a dictionary that maps log_type to the respective function calls
     manual_gen_switch = {
         'option1': handle_ssh_logs,
+        'option3': handle_ftp_logs,
     }
 
     quick_gen_switch = {
         'option1': lambda: handle_quick_gen('option1'),
+        'option3': lambda: handle_quick_gen('option3'),
     }
 
     # Handle manual generation based on log type
@@ -49,6 +51,7 @@ def handle_quick_gen(log_type):
     # Define a dictionary that maps log_type to the respective quick generation function
     quick_gen_switch = {
         'option1': generate_ssh_logs_quick,
+        'option3': generate_ftp_logs_quick,
     }
 
     # Use the log_type as a key to call the respective function
@@ -90,6 +93,31 @@ def handle_ssh_logs(request):
     save_ssh_logs(logs)
 
     return "SSH Logs generated successfully!"
+
+# Handle FTP log generation
+def handle_ftp_logs(request):
+    timestamp_str = request.form.get('ftp_timestamp')
+    client_ipaddr = request.form.get('ftp_clientipaddr')
+    file_size_str = request.form.get('ftp_filesize')
+    user_name = request.form.get('ftp_username')
+    file_path = request.form.get('ftp_filePath')
+
+    # Parse timestamp
+    start_timestamp = parse_timestamp(timestamp_str)
+    if not start_timestamp:
+        return "Error: Invalid timestamp format.", 400
+
+    # Validate file size
+    try:
+        file_size = int(file_size_str)
+    except (TypeError, ValueError):
+        return "Error: Invalid file size provided.", 400
+
+    # Generate and save FTP logs
+    logs = generate_single_ftplog(start_timestamp, client_ipaddr, file_size, user_name, file_path)
+    save_ftp_logs(logs)
+
+    return "FTP Logs generated successfully!"
 
 # Function to handle quick generation of SSH logs
 def generate_ssh_logs_quick():
