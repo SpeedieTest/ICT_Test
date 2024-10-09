@@ -1,7 +1,7 @@
 import os
 import random
 from datetime import datetime, timedelta
-from .value_generator import (generate_random_username, generate_random_hostname, generate_random_timestamp, generate_random_filename())
+from .value_generator import (generate_random_username, generate_random_hostname, generate_random_timestamp, generate_random_filename, generate_random_source_path)
 
 # Function that generates logs
 def generate_synthetic_logs(timestamp, host_name, user_name, file_path, file_name):
@@ -25,19 +25,19 @@ def generate_daily_activity_logs():
         for _ in range(10):
             login_time = generate_random_timestamp()
             host_name = generate_random_hostname()
-            file_path = generate_random_filename()
-            file_name = 
-            user_name = 
+            file_path = generate_random_source_path()
+            file_name = generate_random_filename()
+            user_name = generate_random_username()
 
-            logs.extend(generate_synthetic_logs(login_time, host_name, user_name, file_path, file_name))
+        logs.extend(generate_synthetic_logs(login_time, host_name, user_name, file_path, file_name))
 
         
         #malicious variable what is considered malicious (this generates the attack)
         login_time = generate_random_timestamp()
         host_name = generate_random_hostname()
-        file_path = generate_random_filename()
-        file_name = 
-        user_name = 
+        file_path = generate_random_source_path()
+        file_name = generate_random_filename()
+        user_name = generate_random_username()
 
         logs.extend(generate_synthetic_logs(login_time, host_name, user_name, file_path, file_name))
     
