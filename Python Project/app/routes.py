@@ -25,11 +25,13 @@ def submit_form():
     manual_gen_switch = {
         'option1': handle_ssh_logs,
         'option3': handle_ftp_logs,
+        'option2': handle_fs_logs,
     }
 
     quick_gen_switch = {
         'option1': lambda: handle_quick_gen('option1'),
         'option3': lambda: handle_quick_gen('option3'),
+        'option2': lambda: handle_quick_gen('option2'),
     }
 
     # Handle manual generation based on log type
@@ -52,6 +54,7 @@ def handle_quick_gen(log_type):
     quick_gen_switch = {
         'option1': generate_ssh_logs_quick,
         'option3': generate_ftp_logs_quick,
+        'option2': generate_fs_logs_quick,
     }
 
     # Use the log_type as a key to call the respective function
@@ -118,6 +121,29 @@ def handle_ftp_logs(request):
     save_ftp_logs(logs)
 
     return "FTP Logs generated successfully!"
+
+# Handle FS log generation
+def handle_fs_logs(request):
+    timestamp_str = request.form.get('fs_timestamp')
+    user_name = request.form.get('fs_username')
+    file_path = request.form.get('fs_filePath')
+
+    # Parse timestamp
+    start_timestamp = parse_timestamp(timestamp_str)
+    if not start_timestamp:
+        return "Error: Invalid timestamp format.", 400
+
+    # Validate file size
+    try:
+        file_size = int(file_size_str)
+    except (TypeError, ValueError):
+        return "Error: Invalid file size provided.", 400
+
+    # Generate and save FTP logs
+    logs = generate_single_fslog(start_timestamp, user_name, file_path)
+    save_fs_logs(logs)
+
+    return "File System Logs generated successfully!"
 
 # Function to handle quick generation of SSH logs
 def generate_ssh_logs_quick():
