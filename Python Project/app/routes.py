@@ -2,9 +2,9 @@ from flask import render_template, request
 from app import app
 from datetime import datetime
 # Import SSHlogin log creation.
-from .sshlogin import generate_single_sshlog, save_ssh_logs, auto_generate_ssh_logs
-from .filetransfer import generate_single_ftplog, save_ftp_logs
-from .filesystem import generate_single_fslog, save_fs_logs
+from .log_gen_ssh import generate_single_sshlog, save_ssh_logs, auto_generate_ssh_logs
+from .log_gen_ftp import generate_single_ftplog, save_ftp_logs
+from .log_gen_filesystem import generate_single_fslog, save_fs_logs
 @app.route('/')
 @app.route('/index')
 def index():
@@ -147,7 +147,7 @@ def handle_fs_logs(request):
 # Function to handle quick generation of SSH logs
 def generate_ssh_logs_quick():
     # Generate daily SSH activity logs 
-    (ip_external_chance_normal, ip_external_chance_bruteforce, bruteforce_chance, spray_attack_chance)
+    #(ip_external_chance_normal, ip_external_chance_bruteforce, bruteforce_chance, spray_attack_chance)
     logs = auto_generate_ssh_logs(0.1,0.8,0.2, 0.1)  
     save_ssh_logs(logs)  # Save the logs
     return "Daily network activity logs generated successfully!"
@@ -155,7 +155,7 @@ def generate_ssh_logs_quick():
 # Function to handle quick generation of FTP logs
 def generate_ftp_logs_quick():
     # Generate daily FTP activity logs 
-    (mass_download_chance, mass_exfiltration_chance)
+    #(mass_download_chance, mass_exfiltration_chance)
     logs = auto_generate_ftp_logs(0.1,0.8,0.2, 0.1)  
     save_ftp_logs(logs)  # Save the logs
     return "Daily file transfer logs generated successfully!"
@@ -163,7 +163,7 @@ def generate_ftp_logs_quick():
 # Function to handle quick generation of File System logs
 def generate_fs_logs_quick():
     # Generate daily File System activity logs 
-    (chance_of_exfiltration)
+    #(chance_of_exfiltration)
     logs = auto_generate_ssh_logs(0.1,0.8,0.2, 0.1)  
     save_fs_logs(logs)  # Save the logs
     return "Daily file system logs generated successfully!"
