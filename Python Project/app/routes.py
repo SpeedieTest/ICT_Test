@@ -1,10 +1,10 @@
 from flask import render_template, request
 from app import app
 from datetime import datetime
-from .sshlogin import generate_synthetic_logs as ssh_gsl
-from .sshlogin import save_logs as ssh_sl
-from .sshlogin import generate_daily_activity_logs as ssh_dal
-from .value_generator import generate_random_username, generate_random_hostname, generate_random_source_path, generate_random_destination_path
+# Import SSHlogin log creation.
+from .log_gen_ssh import generate_single_sshlog, save_ssh_logs, auto_generate_ssh_logs
+# Import Kernel log creation
+from .log_gen_kernel import generate_single_kernellog, save_kernel_logs, auto_generate_kernel_logs
 
 @app.route('/')
 @app.route('/index')
@@ -26,10 +26,12 @@ def submit_form():
     # Define a dictionary that maps log_type to the respective function calls
     manual_gen_switch = {
         'option1': handle_ssh_logs,
+        'option7': handle_kernel_logs,
     }
 
     quick_gen_switch = {
         'option1': lambda: handle_quick_gen('option1'),
+        'option7': lambda: handle_quick_gen('option7'),
     }
 
     # Handle manual generation based on log type
@@ -51,6 +53,7 @@ def handle_quick_gen(log_type):
     # Define a dictionary that maps log_type to the respective quick generation function
     quick_gen_switch = {
         'option1': generate_ssh_logs_quick,
+        'option7': generate_kernel_logs_quick,
     }
 
     # Use the log_type as a key to call the respective function
@@ -88,13 +91,39 @@ def handle_ssh_logs(request):
         return "Error: Invalid timestamp format.", 400
 
     # Generate and save SSH logs
-    logs = ssh_gsl(start_timestamp, host_name, source_ip, user_acc, event_outcome, num_logs)
-    ssh_sl(logs)
+    logs = generate_single_sshlog(start_timestamp, host_name, source_ip, user_acc, event_outcome, num_logs)
+    save_ssh_logs(logs)
 
     return "SSH Logs generated successfully!"
 
+
 # Function to handle quick generation of SSH logs
 def generate_ssh_logs_quick():
-    logs = ssh_dal(0.1,0.8,0.2)  # Call the function that generates daily SSH activity logs
-    ssh_sl(logs)  # Save the logs
+    # Generate daily SSH activity logs 
+    # (ip_external_chance_normal, ip_external_chance_bruteforce, bruteforce_chance, spray_attack_chance)
+    logs = auto_generate_ssh_logs(0.1,0.8,0.2, 0.6)  
+    save_ssh_logs(logs)  # Save the logs
     return "Daily network activity logs generated successfully!"
+
+
+# Handle Kernel log generation
+def handle_kernel_logs(request):
+    timestamp_str = request.form.get('kernel_timestamp')
+    host_name = request.form.get('kernel_hostname')
+    process_name = request.form.get('kernel_processname')
+
+    # Parse timestamp
+    start_timestamp = parse_timestamp(timestamp_str)
+    if not start_timestamp:
+        return "Error: Invalid timestamp format.", 400
+
+    # Generate and save Kernel log
+    logs = generate_single_kernellog(start_timestamp, host_name, process_name)
+    save_kernel_logs(logs)
+
+    return "Kernel Log generated successfully!"
+
+def generate_kernel_logs_quick():
+    logs = auto_generate_kernel_logs(0.05)
+    save_kernel_logs(logs)
+    return "Daily kernel logs generated successfully!"
