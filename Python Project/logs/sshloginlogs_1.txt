@@ -1,5 +1,0 @@
-Sep 29 10:00:14 Localhost sshd[21157]: Accepted password for speediej from 192.168.3.3 port 50755 ssh2
-Sep 29 10:00:14 Localhost sshd[44557]: Accepted password for speediej from 192.168.3.3 port 21014 ssh2
-Sep 29 10:00:14 Localhost sshd[31407]: Accepted password for speediej from 192.168.3.3 port 3912 ssh2
-Sep 29 10:00:14 Localhost sshd[47037]: Accepted password for speediej from 192.168.3.3 port 14564 ssh2
-Sep 29 10:00:14 Localhost sshd[14703]: Accepted password for speediej from 192.168.3.3 port 45951 ssh2
