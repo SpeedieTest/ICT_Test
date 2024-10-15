@@ -9,7 +9,8 @@ from .log_gen_ftp import generate_single_ftplog, save_ftp_logs, auto_generate_ft
 from .log_gen_filesystem import generate_single_fslog, save_fs_logs, auto_generate_fs_logs
 # Import Kernel log creation
 from .log_gen_kernel import generate_single_kernellog, save_kernel_logs, auto_generate_kernel_logs
-
+# Import Systemlog log creation
+from .log_gen_syslog import generate_single_syslog, auto_generate_syslog_logs, save_syslog_logs
 
 @app.route('/')
 @app.route('/index')
@@ -34,6 +35,7 @@ def submit_form():
         'option2': handle_fs_logs,
         'option3': handle_ftp_logs,
         'option7': handle_kernel_logs,
+        'option8': handle_syslog_logs,
     }
 
     quick_gen_switch = {
@@ -41,6 +43,7 @@ def submit_form():
         'option2': lambda: handle_quick_gen('option2'),
         'option3': lambda: handle_quick_gen('option3'),
         'option7': lambda: handle_quick_gen('option7'),
+        'option8': lambda: handle_quick_gen('option8'),
     }
 
     # Handle manual generation based on log type
@@ -65,6 +68,7 @@ def handle_quick_gen(log_type):
         'option2': generate_fs_logs_quick,
         'option3': generate_ftp_logs_quick,
         'option7': generate_kernel_logs_quick,
+        'option8': generate_syslogs_logs_quick,
     }
 
     # Use the log_type as a key to call the respective function
@@ -108,7 +112,7 @@ def handle_ssh_logs(request):
 
     return "SSH Logs generated successfully!"
 
-    # Function to handle quick generation of SSH logs
+# Function to handle quick generation of SSH logs
 def generate_ssh_logs_quick():
     # Generate daily SSH activity logs 
     # (ip_external_chance_normal, ip_external_chance_bruteforce, bruteforce_chance, spray_attack_chance)
@@ -180,7 +184,6 @@ def generate_fs_logs_quick():
     save_fs_logs(logs)  # Save the logs
     return "Daily file system logs generated successfully!"
 
-
 # ------------------------------------ KERNEL LOGS ------------------------------------------------------
 
 # Handle Kernel log generation
@@ -207,4 +210,32 @@ def generate_kernel_logs_quick():
     #(ip_external_chance_normal, ip_external_chance_bruteforce, bruteforce_chance, spray_attack_chance)
     logs = auto_generate_ssh_logs(0.1,0.8,0.2, 0.1)  
     save_ssh_logs(logs)  # Save the logs
+    return "Daily network activity logs generated successfully!"
+
+# ------------------------------------ SYSTEMLOGS LOGS ------------------------------------------------------
+
+# Handle Syslog log generation
+def handle_syslog_logs(request):
+    timestamp_str = request.form.get('syslog_timestamp')
+    host_name = request.form.get('syslog_hostname')
+    user_name = request.form.get('syslog_username')
+    file_path = request.form.get('syslog_filepath')
+    file_name = request.form.get('syslog_filename')
+
+    # Parse timestamp Syslog
+    timestamp_ = parse_timestamp(timestamp_str)
+    if not timestamp_:
+        return "Error: Invalid timestamp format.", 400
+
+    # Generate and save Syslog logs
+    logs = generate_single_syslog(timestamp_, host_name, user_name, file_path, file_name)
+    save_syslog_logs(logs)
+
+    return "Syslogs generated successfully!"
+
+# Function to handle quick generation of Syslog logs
+def generate_syslogs_logs_quick():
+    # Generate daily Syslog activity logs 
+    logs = auto_generate_syslog_logs(0.6)  
+    save_syslog_logs(logs)  # Save the logs
     return "Daily network activity logs generated successfully!"
