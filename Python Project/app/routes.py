@@ -31,6 +31,7 @@ def submit_form():
 
     quick_gen_switch = {
         'option1': lambda: handle_quick_gen('option1'),
+        'option8': lambda: handle_quick_gen('option8'),
     }
 
     # Handle manual generation based on log type
@@ -52,6 +53,7 @@ def handle_quick_gen(log_type):
     # Define a dictionary that maps log_type to the respective quick generation function
     quick_gen_switch = {
         'option1': generate_ssh_logs_quick,
+        'option8': generate_syslogs_logs_quick,
     }
 
     # Use the log_type as a key to call the respective function
@@ -119,4 +121,11 @@ def generate_ssh_logs_quick():
     # (ip_external_chance_normal, ip_external_chance_bruteforce, bruteforce_chance, spray_attack_chance)
     logs = auto_generate_ssh_logs(0.1,0.8,0.2, 0.6)  
     save_ssh_logs(logs)  # Save the logs
+    return "Daily network activity logs generated successfully!"
+
+# Function to handle quick generation of Syslog logs
+def generate_syslogs_logs_quick():
+    # Generate daily Syslog activity logs 
+    logs = auto_generate_syslog_logs(0.1,0.8,0.2, 0.6)  
+    save_syslog_logs(logs)  # Save the logs
     return "Daily network activity logs generated successfully!"
