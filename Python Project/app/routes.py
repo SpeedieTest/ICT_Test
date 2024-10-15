@@ -3,8 +3,7 @@ from app import app
 from datetime import datetime
 # Import SSHlogin log creation.
 from .sshlogin import generate_single_sshlog, save_ssh_logs, auto_generate_ssh_logs
-from .syslog import generate_synthetic_logs as syslog_gsl
-from .syslog import save_logs as syslog_sl
+from .log_gen_syslog import generate_single_syslog, save_syslog_logs
 from .value_generator import generate_random_username, generate_random_hostname, generate_random_source_path, generate_random_destination_path, generate_random_filename
 
 @app.route('/')
@@ -109,8 +108,8 @@ def handle_syslog_logs(request):
         return "Error: Invalid timestamp format.", 400
 
     # Generate and save Syslog logs
-    logs = syslog_gsl(timestamp_, host_name, user_name, file_path, file_name)
-    syslog_sl(logs)
+    logs = generate_single_syslog(timestamp_, host_name, user_name, file_path, file_name)
+    save_syslog_logs(logs)
 
     return "Syslogs generated successfully!"
 
