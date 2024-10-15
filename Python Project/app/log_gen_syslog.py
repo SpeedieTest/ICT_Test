@@ -1,53 +1,61 @@
 import os
-import random
 from datetime import datetime, timedelta
-from .value_generator import (generate_random_username, generate_random_hostname, generate_random_timestamp, generate_random_filename, generate_random_source_path)
+import random
+from .value_generator import generate_random_hostname, generate_random_username, generate_random_filepath, generate_random_filename, generate_random_timestamp
 
-# Function that generates logs
-def generate_synthetic_logs(timestamp, host_name, user_name, file_path, file_name):
-        logs = []
-        
-        formatted_timestamp = timestamp.strftime('%b %d %H:%M:%S')
-            
-        bash_id = random.randint(10000, 99999)
-            
-        log = f"{formatted_timestamp} {host_name} bash[{bash_id}]: {file_path}/{file_name} executed by {user_name}"
-
-        logs.append(log)
-
-        return logs
-    
-def generate_daily_activity_logs():
+# Function to generate a single Syslog log entry
+def generate_single_syslog(timestamp, hostname, username, file_path, file_name):
     logs = []
-    num_logs = random.randint(50, 200)
+    
+    # Format the timestamp as required (e.g., Sep 19 15:01:35)
+    formatted_timestamp = timestamp.strftime('%b %d %H:%M:%S')
+    
+    # Random process ID for the log
+    process_id = random.randint(10000, 99999)
 
+    # Create the log entry
+    log = f"{formatted_timestamp} {hostname} bash[{process_id}]: {file_path}/{file_name} executed by {username}"
+    
+    logs.append(log)
+    return logs
+
+# Function to auto-generate syslog entries for a normal business day
+def auto_generate_syslog_logs(tmp_execution_chance):
+    logs = []
+    num_logs = random.randint(50, 200)  # A small company might generate 50-200 syslog logs per day
+
+    # Generate random syslog entries
     for _ in range(num_logs):
-        login_time = generate_random_timestamp()
-        host_name = generate_random_hostname()
-        user_name = generate_random_username()
-
+        timestamp = generate_random_timestamp()
+        hostname = generate_random_hostname()
+        username = generate_random_username()
+        # Decide if the file will be executed from /tmp
         if random.random() < tmp_execution_chance:
-             file_path - '/tmp'
+            file_path = '/tmp'
         else:
-             file_path= generate_random_source_path()
+            file_path = generate_random_filepath()
         file_name = generate_random_filename()
 
-        logs.extend(generate_synthetic_logs(login_time, host_name, user_name, file_path, file_name))
+        # Generate and add the log to the logs list
+        logs.extend(generate_single_syslog(timestamp, hostname, username, file_path, file_name))
 
     # Sort logs by timestamp
     logs.sort()
 
     return logs
 
-
-# Function to save logs into a single file
-def save_logs(logs):
-    os.makedirs('logs', exist_ok=True)
+# Function to save Syslog logs into a file
+def save_syslog_logs(logs):
+    os.makedirs('logs', exist_ok=True)  # Ensure the 'logs' directory exists
     log_number = 1
-    while os.path.exists(f"logs/sysloglogs_{log_number}.txt"):
+
+    # Check for existing files and increment log number
+    while os.path.exists(f"logs/syslog_logs_{log_number}.txt"):
         log_number += 1
-    log_filename = f"logs/sysloglogs_{log_number}.txt"
-    
+
+    log_filename = f"logs/syslog_logs_{log_number}.txt"
+
+    # Write the logs into the file
     with open(log_filename, 'w') as file:
         for log in logs:
             file.write(log + '\n')
