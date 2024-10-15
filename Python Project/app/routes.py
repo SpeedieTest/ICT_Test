@@ -4,13 +4,9 @@ from datetime import datetime
 # Import SSHlogin log creation.
 from .log_gen_ssh import generate_single_sshlog, save_ssh_logs, auto_generate_ssh_logs
 # iptables Imports
-from .iptables import generate_iptables_logs as iptables_gsl
-from .iptables import save_logs as iptables_sl
-from .iptables import generate_random_iptables_logs as iptables_grl
+from .log_gen_iptables import generate_iptables_logs, save_logs, generate_random_iptables_logs
 # Snort Imports
-from .snort import generate_snort_logs as snort_gsl
-from .snort import save_logs as snort_sl
-from .snort import auto_generate_snort_logs
+from .log_gen_snort import generate_snort_logs, save_logs, auto_generate_snort_logs
 # Import Kernel log creation
 from .log_gen_kernel import generate_single_kernellog, save_kernel_logs, auto_generate_kernel_logs
 
@@ -127,25 +123,24 @@ def handle_iptables_logs (request):
     destination_port = request.form.get('iptables_destinationport')
     packet_length= request.form.get('iptables_packetlength')
 
-    # Convert the timestamp
-    try:
-        start_timestamp = datetime.strptime(timestamp_str, '%Y-%m-%dT%H:%M:%S')
-    except ValueError:
+    # Parse timestamp
+    start_timestamp = parse_timestamp(timestamp_str)
+    if not start_timestamp:
         return "Error: Invalid timestamp format.", 400
 
     # Generate iptables logs
-    logs = iptables_gsl(start_timestamp, host_name, source_ip, source_port, destination_ip, destination_port, packet_length)
+    logs = generate_iptables_logs(start_timestamp, host_name, source_ip, source_port, destination_ip, destination_port, packet_length)
 
     # extract just the log message
     log_messages = [log for _, log in logs]
     # Save logs to a file
-    iptables_sl(log_messages)
+    save_logs(log_messages)
 
     return "iptables Logs generated successfully!"
 
 def generate_iptables_logs_quick():
-    logs = iptables_grl(0.05)
-    iptables_sl(logs)
+    logs = generate_random_iptables_logs(0.05)
+    save_logs(logs)
     return "Random iptables logs generated successfuly!"
 
 
@@ -159,25 +154,24 @@ def handle_snort_logs (request):
     file_type = request.form.get('snort_filetype')
     file_path = request.form.get('snort_filePath')
 
-    # Convert the timestamp
-    try:
-        start_timestamp = datetime.strptime(timestamp_str, '%Y-%m-%dT%H:%M:%S')
-    except ValueError:
+   # Parse timestamp
+    start_timestamp = parse_timestamp(timestamp_str)
+    if not start_timestamp:
         return "Error: Invalid timestamp format.", 400
     
     # Generate iptables logs
-    logs = snort_gsl(start_timestamp, file_hash, source_ip, source_port, file_name, file_size, file_type, file_path)
+    logs = generate_snort_logs(start_timestamp, file_hash, source_ip, source_port, file_name, file_size, file_type, file_path)
 
     # extract just the log message
     log_messages = [log for _, log in logs]
     # Save logs to a file
-    snort_sl(log_messages)
+    save_logs(log_messages)
 
     return "Snort Logs generated successfully!"
 
 def generate_snort_logs_quick():
     logs = auto_generate_snort_logs(0.05)
-    snort_sl(logs)
+    save_logs(logs)
     return "Random snort logs generated successfuly!"  
 
 # Handle Kernel log generation
