@@ -126,6 +126,6 @@ def generate_ssh_logs_quick():
 # Function to handle quick generation of Syslog logs
 def generate_syslogs_logs_quick():
     # Generate daily Syslog activity logs 
-    logs = auto_generate_syslog_logs(0.1,0.8,0.2, 0.6)  
+    logs = auto_generate_syslog_logs(0.6)  
     save_syslog_logs(logs)  # Save the logs
     return "Daily network activity logs generated successfully!"
