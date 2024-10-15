@@ -154,7 +154,7 @@ def generate_ssh_logs_quick():
 
 # Function to handle quick generation of FTP logs
 def generate_ftp_logs_quick():
-    # Generate daily FTP activity logs #(mass_download_chance, mass_exfiltration_chance)
+    # Generate daily FTP activity logs (mass_download_chance, mass_exfiltration_chance)
     logs = auto_generate_ftp_logs(0.2,0.66)  
     save_ftp_logs(logs)  # Save the logs
     return "Daily file transfer logs generated successfully!"
