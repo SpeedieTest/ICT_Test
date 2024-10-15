@@ -11,7 +11,7 @@ def generate_synthetic_logs(timestamp, host_name, user_name, file_path, file_nam
             
         bash_id = random.randint(10000, 99999)
             
-        log = f"{formatted_timestamp} {host_name} bash[{bash_id}]: {file_path} {file_name} executed by {user_name}"
+        log = f"{formatted_timestamp} {host_name} bash[{bash_id}]: {file_path}/{file_name} executed by {user_name}"
 
         logs.append(log)
 
@@ -19,33 +19,25 @@ def generate_synthetic_logs(timestamp, host_name, user_name, file_path, file_nam
     
 def generate_daily_activity_logs():
     logs = []
+    num_logs = random.randint(50, 200)
 
-    for _ in range(20):
-        user = generate_random_username()
-        for _ in range(10):
-            login_time = generate_random_timestamp()
-            host_name = generate_random_hostname()
-            file_path = generate_random_source_path()
-            file_name = generate_random_filename()
-            user_name = generate_random_username()
-
-        logs.extend(generate_synthetic_logs(login_time, host_name, user_name, file_path, file_name))
-
-        
-        #malicious variable what is considered malicious (this generates the attack)
+    for _ in range(num_logs):
         login_time = generate_random_timestamp()
         host_name = generate_random_hostname()
-        file_path = generate_random_source_path()
-        file_name = generate_random_filename()
         user_name = generate_random_username()
 
-        logs.extend(generate_synthetic_logs(login_time, host_name, user_name, file_path, file_name))
-    
-    # Sort logs by timestamp
-    logs.sort(key=lambda x: x[0])
+        if random.random() < tmp_execution_chance:
+             file_path - '/tmp'
+        else:
+             file_path= generate_random_source_path()
+        file_name = generate_random_filename()
 
-    # Extract just the log messages, discarding the timestamp
-    return [log for _, log in logs]
+        logs.extend(generate_synthetic_logs(login_time, host_name, user_name, file_path, file_name))
+
+    # Sort logs by timestamp
+    logs.sort()
+
+    return logs
 
 
 # Function to save logs into a single file
