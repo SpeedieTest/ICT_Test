@@ -3,7 +3,7 @@ from app import app
 from datetime import datetime
 # Import SSHlogin log creation.
 from .sshlogin import generate_single_sshlog, save_ssh_logs, auto_generate_ssh_logs
-from .log_gen_syslog import generate_single_syslog, save_syslog_logs
+from .log_gen_syslog import generate_single_syslog, auto_generate_syslog_logs, save_syslog_logs
 from .value_generator import generate_random_username, generate_random_hostname, generate_random_source_path, generate_random_destination_path, generate_random_filename
 
 @app.route('/')
