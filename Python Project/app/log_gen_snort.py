@@ -85,7 +85,7 @@ def auto_generate_snort_logs(malware_event_chance):
     # Extract just the log messages, discarding the timestamp
     return [log for _, log in logs]
 
-def save_logs(logs):
+def save_snort_logs(logs):
     os.makedirs('logs', exist_ok=True)
     log_number = 1
     

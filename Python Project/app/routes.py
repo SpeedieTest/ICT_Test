@@ -4,9 +4,9 @@ from datetime import datetime
 # Import SSHlogin log creation.
 from .log_gen_ssh import generate_single_sshlog, save_ssh_logs, auto_generate_ssh_logs
 # iptables Imports
-from .log_gen_iptables import generate_iptables_logs, save_logs, generate_random_iptables_logs
+from .log_gen_iptables import generate_iptables_logs, save_iptables_logs, generate_random_iptables_logs
 # Snort Imports
-from .log_gen_snort import generate_snort_logs, save_logs, auto_generate_snort_logs
+from .log_gen_snort import generate_snort_logs, save_snort_logs, auto_generate_snort_logs
 # Import Kernel log creation
 from .log_gen_kernel import generate_single_kernellog, save_kernel_logs, auto_generate_kernel_logs
 
@@ -134,13 +134,13 @@ def handle_iptables_logs (request):
     # extract just the log message
     log_messages = [log for _, log in logs]
     # Save logs to a file
-    save_logs(log_messages)
+    save_iptables_logs(log_messages)
 
     return "iptables Logs generated successfully!"
 
 def generate_iptables_logs_quick():
     logs = generate_random_iptables_logs(0.05)
-    save_logs(logs)
+    save_iptables_logs(logs)
     return "Random iptables logs generated successfuly!"
 
 
@@ -165,13 +165,13 @@ def handle_snort_logs (request):
     # extract just the log message
     log_messages = [log for _, log in logs]
     # Save logs to a file
-    save_logs(log_messages)
+    save_snort_logs(log_messages)
 
     return "Snort Logs generated successfully!"
 
 def generate_snort_logs_quick():
     logs = auto_generate_snort_logs(0.05)
-    save_logs(logs)
+    save_snort_logs(logs)
     return "Random snort logs generated successfuly!"  
 
 # Handle Kernel log generation

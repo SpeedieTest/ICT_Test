@@ -63,7 +63,7 @@ def generate_random_iptables_logs(c2_attack_chance):
     # Extract just the log messages, discarding the timestamp
     return [log for _, log in logs]
 
-def save_logs(logs):
+def save_iptables_logs(logs):
     os.makedirs('logs', exist_ok=True)
     log_number = 1
     
