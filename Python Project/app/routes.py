@@ -4,7 +4,7 @@ from datetime import datetime
 from .sshlogin import generate_synthetic_logs as ssh_gsl
 from .sshlogin import save_logs as ssh_sl
 from .sshlogin import generate_daily_activity_logs as ssh_dal
-from .netflow import generate_single_netflowlog, save_netflow_logs, auto_generate_netflow_logs
+from .log_gen_netflow import generate_single_netflowlog, save_netflow_logs, auto_generate_netflow_logs
 
 from .value_generator import generate_random_username, generate_random_hostname, generate_random_source_path
 
