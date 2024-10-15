@@ -1,9 +1,8 @@
 from flask import render_template, request
 from app import app
 from datetime import datetime
-from .sshlogin import generate_synthetic_logs as ssh_gsl
-from .sshlogin import save_logs as ssh_sl
-from .sshlogin import generate_daily_activity_logs as ssh_dal
+# Import SSHlogin log creation.
+from .sshlogin import generate_single_sshlog, save_ssh_logs, auto_generate_ssh_logs
 from .syslog import generate_synthetic_logs as syslog_gsl
 from .syslog import save_logs as syslog_sl
 from .value_generator import generate_random_username, generate_random_hostname, generate_random_source_path, generate_random_destination_path, generate_random_filename
@@ -91,8 +90,8 @@ def handle_ssh_logs(request):
         return "Error: Invalid timestamp format.", 400
 
     # Generate and save SSH logs
-    logs = ssh_gsl(start_timestamp, host_name, source_ip, user_acc, event_outcome, num_logs)
-    ssh_sl(logs)
+    logs = generate_single_sshlog(start_timestamp, host_name, source_ip, user_acc, event_outcome, num_logs)
+    save_ssh_logs(logs)
 
     return "SSH Logs generated successfully!"
 
@@ -117,6 +116,8 @@ def handle_syslog_logs(request):
 
 # Function to handle quick generation of SSH logs
 def generate_ssh_logs_quick():
-    logs = ssh_dal()  # Call the function that generates daily SSH activity logs
-    ssh_sl(logs)  # Save the logs
+    # Generate daily SSH activity logs 
+    # (ip_external_chance_normal, ip_external_chance_bruteforce, bruteforce_chance, spray_attack_chance)
+    logs = auto_generate_ssh_logs(0.1,0.8,0.2, 0.6)  
+    save_ssh_logs(logs)  # Save the logs
     return "Daily network activity logs generated successfully!"
