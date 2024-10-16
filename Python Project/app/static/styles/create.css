@@ -5,10 +5,11 @@
 }
 
 body {
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+    font-family: "Tahoma", sans-serif;
+    background-color: #008080;
+    /* Classic Windows teal desktop background */
     margin: 0;
+    padding: 0;
 }
 
 button {
@@ -29,40 +30,12 @@ button:hover {
     background-color: #45a098;
 }
 
-/* NAVBAR */
-nav {
-    display: flex;
-    /* Optional: makes the nav flexible */
-    padding: 20px;
-    background-color: #000000;
-    color: #ffffff;
-    margin-bottom: 10px;
-}
-
-nav form {
-    display: flex;
-    /* Align items inside the nav form horizontally */
-    align-items: center;
-    /* Center items vertically */
-    justify-items: space-between;
-    min-width: 1000px;
-}
-
-nav form label {
-    width: 80%;
-    align-items: center;
-    margin-right: 10px;
-    /* Space between label and button */
-    font-size: 24px;
-    /* Adjust font size */
-}
-
-nav form button.btn {
-    width: 20%;
-}
-
 /* QUICK CREATE BUTTON */
-form .qc {}
+.qc {
+    display: flex;
+    max-width: 500px;
+    min-width: 300px;
+}
 
 /* Custom Create Form */
 main form {
@@ -151,8 +124,4 @@ input[type="submit"] {
     cursor: pointer;
     border-radius: 5px;
     transition: background-color 0.3s;
-}
-
-.nav {
-    list-style: none;
 }
