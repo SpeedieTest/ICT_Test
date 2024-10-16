@@ -7,6 +7,10 @@ from .log_gen_ssh import generate_single_sshlog, save_ssh_logs, auto_generate_ss
 from .log_gen_ftp import generate_single_ftplog, save_ftp_logs, auto_generate_ftp_logs
 # Import filesystem log creation
 from .log_gen_filesystem import generate_single_fslog, save_fs_logs, auto_generate_fs_logs
+# iptables Imports
+from .log_gen_iptables import generate_iptables_logs, save_iptables_logs, generate_random_iptables_logs
+# Snort Imports
+from .log_gen_snort import generate_snort_logs, save_snort_logs, auto_generate_snort_logs
 # Import netflow log creation
 from .log_gen_netflow import generate_single_netflowlog, save_netflow_logs, auto_generate_netflow_logs
 # Import Kernel log creation
@@ -37,6 +41,8 @@ def submit_form():
         'option1': handle_ssh_logs,
         'option2': handle_fs_logs,
         'option3': handle_ftp_logs,
+        'option4': handle_iptables_logs,
+        'option5': handle_snort_logs,
         'option6': handle_netflow_logs,
         'option7': handle_kernel_logs,
         'option8': handle_syslog_logs,
@@ -46,6 +52,8 @@ def submit_form():
         'option1': lambda: handle_quick_gen('option1'),
         'option2': lambda: handle_quick_gen('option2'),
         'option3': lambda: handle_quick_gen('option3'),
+        'option4': lambda: handle_quick_gen('option4'),
+        'option5': lambda: handle_quick_gen('option5'),
         'option6': lambda: handle_quick_gen('option6'),
         'option7': lambda: handle_quick_gen('option7'),
         'option8': lambda: handle_quick_gen('option8'),
@@ -72,6 +80,8 @@ def handle_quick_gen(log_type):
         'option1': generate_ssh_logs_quick,
         'option2': generate_fs_logs_quick,
         'option3': generate_ftp_logs_quick,
+        'option4': generate_iptables_logs_quick,
+        'option5': generate_snort_logs_quick,
         'option6': generate_netflow_logs_quick,
         'option7': generate_kernel_logs_quick,
         'option8': generate_syslogs_logs_quick,
@@ -118,7 +128,7 @@ def handle_ssh_logs(request):
 
     return "SSH Logs generated successfully!"
 
-# Function to handle quick generation of netflow logs
+# Function to handle quick generation of ssh logs
 def generate_ssh_logs_quick():
     # Generate daily SSH activity logs 
     # (ip_external_chance_normal, ip_external_chance_bruteforce, bruteforce_chance, spray_attack_chance)
@@ -135,7 +145,6 @@ def handle_ftp_logs(request):
     file_size_str = request.form.get('ftp_filesize')
     user_name = request.form.get('ftp_username')
     file_path = request.form.get('ftp_filePath')
-
     # Parse timestamp
     start_timestamp = parse_timestamp(timestamp_str)
     if not start_timestamp:
@@ -227,7 +236,7 @@ def generate_netflow_logs_quick():
     save_netflow_logs(logs)
     return "Daily netflow logs generated successfully!"
 
-# ------------------------------------ KERNEL LOGS ------------------------------------------------------
+# ------------------------------------ KERNEL LOGS ------------------------------------------------------ 
 
 # Handle Kernel log generation
 def handle_kernel_logs(request):
@@ -250,10 +259,7 @@ def generate_kernel_logs_quick():
     logs = auto_generate_kernel_logs(0.05)
     save_kernel_logs(logs)
     return "Daily kernel logs generated successfully!"
-    #(ip_external_chance_normal, ip_external_chance_bruteforce, bruteforce_chance, spray_attack_chance)
-    logs = auto_generate_ssh_logs(0.1,0.8,0.2, 0.1)  
-    save_ssh_logs(logs)  # Save the logs
-    return "Daily network activity logs generated successfully!"
+    
 
 # ------------------------------------ SYSTEMLOGS LOGS ------------------------------------------------------
 
@@ -281,8 +287,67 @@ def generate_syslogs_logs_quick():
     # Generate daily Syslog activity logs 
     logs = auto_generate_syslog_logs(0.6)  
     save_syslog_logs(logs)  # Save the logs
-    return "Daily network activity logs generated successfully!"
-    logs = ssh_dal()  # Call the function that generates daily SSH activity logs
-    ssh_sl(logs)  # Save the logs
-    return "Daily network activity logs generated successfully!"
 
+# ------------------------------------ IPTABLES LOGS ------------------------------------------------------
+
+def handle_iptables_logs (request):
+    timestamp_str = request.form.get('iptables_timestamp')
+    host_name = request.form.get('iptables_hostName')
+    source_ip = request.form.get('iptables_sourceipaddr')
+    source_port = request.form.get('iptables_sourceport')
+    destination_ip = request.form.get('iptables_destinationipaddr')
+    destination_port = request.form.get('iptables_destinationport')
+    packet_length= request.form.get('iptables_packetlength')
+
+    #Parse timestamp
+    timestamp = parse_timestamp(timestamp_str)
+    if not timestamp:
+        return "Error: Invalid timestamp format.", 400
+
+    # Generate iptables logs
+    logs = generate_iptables_logs(timestamp, host_name, source_ip, source_port, destination_ip, destination_port, packet_length)
+
+    # extract just the log message
+    log_messages = [log for _, log in logs]
+    # Save logs to a file
+    save_iptables_logs(log_messages)
+
+    return "iptables Logs generated successfully!"
+
+
+def generate_iptables_logs_quick():
+    logs = generate_random_iptables_logs(0.05)
+    save_iptables_logs(logs)
+    return "Random iptables logs generated successfuly!"
+
+# ------------------------------------ SNORT LOGS ------------------------------------------------------
+
+def handle_snort_logs (request):
+    timestamp_str = request.form.get('snort_timestamp')
+    file_hash = request.form.get('snort_filehash')
+    source_ip = request.form.get('snort_sourceip')
+    source_port = request.form.get('snort_sourceport')
+    file_name = request.form.get('snort_filename')
+    file_size = request.form.get('snort_filesize')
+    file_type = request.form.get('snort_filetype')
+    file_path = request.form.get('snort_filePath')
+
+# Parse timestamp
+    start_timestamp = parse_timestamp(timestamp_str)
+    if not start_timestamp:
+        return "Error: Invalid timestamp format.", 400
+    
+    # Generate iptables logs
+    logs = generate_snort_logs(start_timestamp, file_hash, source_ip, source_port, file_name, file_size, file_type, file_path)
+
+    # extract just the log message
+    log_messages = [log for _, log in logs]
+    # Save logs to a file
+    save_snort_logs(log_messages)
+
+    return "Snort Logs generated successfully!"
+
+def generate_snort_logs_quick():
+    logs = auto_generate_snort_logs(0.05)
+    save_snort_logs(logs)
+    return "Random snort logs generated successfuly!" 
