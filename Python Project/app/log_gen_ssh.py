@@ -57,22 +57,22 @@ def auto_generate_ssh_logs(ip_external_chance_normal, ip_external_chance_brutefo
         if random.random() < bruteforce_chance:
             brute_force_time = generate_random_timestamp()
             source_ip = generate_random_ip(ip_external_chance_bruteforce)
-            logs.extend(generate_logs(brute_force_time, generate_random_hostname(), source_ip, user, 'fail', random.randint(5, 10)))
+            logs.extend(generate_logs(brute_force_time, generate_random_hostname(), source_ip, user, 'fail', random.randint(5, 20)))
 
-    # Random chance for password spray attack
-    if random.random() < spray_attack_chance:
-        # Generate password spray attack
-        spray_attack_ip = generate_random_ip(ip_external_chance_bruteforce)  # Use external IP for attack
-        spray_attack_users = random.sample(users, k=5)  # Select at least 5 random users
-        spray_attack_time = generate_random_timestamp()
-        spray_attempts_per_user = 10  # At least 10 failed attempts per user
-        total_attempts = spray_attempts_per_user * len(spray_attack_users)
-        
-        # Spread the attack over time, max 1 minute apart
-        for i in range(total_attempts):
-            current_user = spray_attack_users[i % len(spray_attack_users)]  # Cycle through users
-            spray_attack_time += timedelta(seconds=random.randint(1, 60))  # Max 1 minute apart
-            logs.extend(generate_logs(spray_attack_time, generate_random_hostname(), spray_attack_ip, current_user, 'fail', 1))
+        # Random chance for password spray attack
+        if random.random() < spray_attack_chance:
+            # Generate password spray attack
+            spray_attack_ip = generate_random_ip(ip_external_chance_bruteforce)  # Use external IP for attack
+            spray_attack_users = random.sample(users, k=5)  # Select at least 5 random users
+            spray_attack_time = generate_random_timestamp()
+            spray_attempts_per_user = 10  # At least 10 failed attempts per user
+            total_attempts = spray_attempts_per_user * len(spray_attack_users)
+            
+            # Spread the attack over time, max 1 minute apart
+            for i in range(total_attempts):
+                current_user = spray_attack_users[i % len(spray_attack_users)]  # Cycle through users
+                spray_attack_time += timedelta(seconds=random.randint(1, 60))  # Max 1 minute apart
+                logs.extend(generate_logs(spray_attack_time, generate_random_hostname(), spray_attack_ip, current_user, 'fail', 1))
 
     # Sort logs by timestamp
     logs.sort(key=lambda x: x[0])
