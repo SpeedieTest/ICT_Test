@@ -1,17 +1,19 @@
-body {
-    font-family: "Tahoma", sans-serif;
-    background-color: #008080; 
-    margin: 0;
-    margin-left: 5px;
-    padding: 0;
+.arrow {
+    cursor: pointer;
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.hidden {
+    display: none;
 }
 
 .window-titlebar {
-    width: 75%;
+    width: 95%;
 }
 
 .menu-bar {
-    width: 75%;
+    width: 95%;
 }
 
 /* Window Content */
@@ -19,10 +21,10 @@ body {
     background-color: #ffffff;
     border: 2px solid #808080;
     padding: 10px;
-    width: 75%;
-    margin: 0px 0px;
+    width: 95%;
     font-family: "Tahoma", sans-serif;
-    box-shadow: 2px 2px #404040, -2px -2px #C0C0C0; /* 3D window effect */
+    box-shadow: 2px 2px #404040, -2px -2px #C0C0C0;
+    /* 3D window effect */
     box-sizing: border-box;
 }
 
@@ -30,7 +32,8 @@ body {
     font-weight: bold;
 }
 
-.window p, .window li {
+.window p,
+.window li {
     margin: 0;
     padding: 5px 0;
     font-size: 14px;

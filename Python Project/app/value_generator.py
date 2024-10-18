@@ -21,18 +21,34 @@ hostnames = [
 base_paths = [
     '/var/www/html/', '/usr/local/share/', '/etc/nginx/', '/home/user/documents/', 
     '/opt/app/config/', '/srv/ftp/', '/mnt/data/', '/media/usb/', '/backup/', '/mnt/drive/',
-    '/home/alice', '/home/bob', '/var/log', '/opt/data', '/usr/share', '/etc/nginx', '/srv/ftp',
-    '/mnt/storage', '/tmp', '/var/tmp'
+    '/home/alice/', '/home/bob/', '/var/log/', '/opt/data/', '/usr/share/', '/etc/nginx/', '/srv/ftp/',
+    '/mnt/storage/', '/tmp/', '/var/tmp/'
 ]
 
 file_paths = [
-    '/home/user', '/var/log', '/etc/init.d', '/usr/local/bin', '/usr/bin',
-    '/opt/scripts', '/var/tmp', '/home/guest', '/mnt/shared', '/srv/scripts'
+    '/home/user/', '/var/log/', '/etc/init.d/', '/usr/local/bin/', '/usr/bin/',
+    '/opt/scripts/', '/home/guest/', '/mnt/shared/', '/srv/scripts/'
 ]
 
 # List of destination paths for potential exfiltration or normal activity
 destination_paths = [
     '/media/usb/', '/external_drive/', '/mnt/backup/', '/media/cdrom/', '/mnt/network_share/'
+]
+
+# List of base paths for sensitive file paths (locations where sensitive data might reside)
+sensitive_file_paths = [
+    '/etc/passwd', '/etc/shadow', '/var/log/auth.log', '/var/log/secure', '/var/www/html/admin/', 
+    '/usr/local/share/confidential/', '/home/admin/docs/financials/', '/home/admin/docs/hr/', 
+    '/srv/db/backups/', '/srv/ftp/sensitive/', '/opt/secrets/', '/opt/vault/', 
+    '/var/lib/mysql/financial_data/', '/var/backups/important/', '/usr/share/nginx/secrets/', 
+    '/mnt/secure_drive/encryption_keys/', '/mnt/backup/confidential/', '/var/lib/postgresql/sensitive/', 
+    '/home/admin/secret_projects/', '/usr/local/etc/private/'
+]
+
+# List of potential temporary file paths on different systems
+temp_file_paths = [
+    "/tmp/", "/var/tmp/", "C:\\Windows\\Temp\\", "C:\\Users\\username\\AppData\\Local\\Temp\\",
+    "/mnt/data/tmp/", "/run/user/1000/", "/private/var/tmp/", "/usr/local/tmp/", "/home/username/tmp/",
 ]
 
 # List of common script or file names
@@ -74,6 +90,10 @@ def generate_random_kernellogmessage():
 def generate_random_filepath():
     return random.choice(file_paths)
 
+# Function to generate a random file path
+def generate_random_tmpfilepath():
+    return random.choice(temp_file_paths)
+
 # Function to generate a random file name
 def generate_random_filename():
     return random.choice(file_names)
@@ -109,7 +129,11 @@ def generate_random_file_path():
 
 # Function to generate a random source path
 def generate_random_source_path():
-    return f"{random.choice(base_paths)}/file{random.randint(1, 100)}.txt"
+    return f"{random.choice(base_paths)}file{random.randint(1, 100)}.txt"
+
+# Function to generate random file paths (sensitive paths)
+def generate_random_sensitive_filepath():
+    return random.choice(sensitive_file_paths)
 
 # Function to generate random destination path for exfiltration
 def generate_random_exfiltration_path():
