@@ -8,10 +8,6 @@ body {
     font-family: "Tahoma", "Verdana", "Arial", sans-serif;
     margin: 0;
     height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
     background-color: #008080;
 }
 
@@ -19,10 +15,8 @@ body {
 .taskbar {
     display: flex;
     justify-content: flex-start;
-    /* Align all elements to the left */
     align-items: center;
     background-color: #C0C0C0;
-    /* Windows 98 gray taskbar */
     padding: 2px;
     height: 40px;
     position: fixed;
@@ -30,10 +24,9 @@ body {
     left: 0;
     right: 0;
     box-shadow: 0px -1px 3px #404040;
-    /* A little shadow for the taskbar */
+    z-index: 10;
 }
 
-/* Start button */
 .start-btn {
     background-color: #C0C0C0;
     padding: 8px 18px;
@@ -45,28 +38,22 @@ body {
     margin-right: 10px;
 }
 
-/* Navigation buttons inside taskbar */
 .nav-btn {
     background-color: #C0C0C0;
-    border: 0px solid #808080;
-    padding-top: 7px;
-    padding-bottom: 7px;
-    padding-right: 120px;
-    padding-left: 8px;
+    padding: 7px 8px;
     box-shadow: inset 1px 1px #ffffff, inset -1px -1px #808080;
     text-decoration: none;
     color: black;
     font-family: "Tahoma", sans-serif;
     font-size: 16px;
     margin-right: 2px;
-    text-align: left;
 }
 
 nav ul {
-    list-style-type: none;
+    display: flex;
+    list-style: none;
     margin: 0;
     padding: 0;
-    display: flex;
     align-items: center;
 }
 
@@ -75,37 +62,18 @@ nav ul li {
 }
 
 /* Hover effect for buttons */
-.start-btn:hover,
-.nav-btn:hover {
+.start-btn:hover, .nav-btn:hover {
     background-color: #dcdcdc;
-    /* Lighter background on hover */
-    border-color: #404040;
-    /* Darker border on hover */
     box-shadow: inset 1px 1px #dcdcdc, inset -1px -1px #404040;
-    /* Sharper shadow effect */
 }
 
 /* Time display */
 .current-time {
     margin-left: auto;
-    margin-right: 1px;
     background-color: #C0C0C0;
-    /* Background color similar to Windows 98 */
-    border: 1px solid #C0C0C0;
-    /* Border color */
     padding: 7px 12px;
-    /* Padding around the text */
-    box-shadow:
-        1px 1px 0px #ffffff,
-        /* Right bottom highlight */
-        -1px -1px 0px #808080,
-        /* Left top shadow */
-        inset 0px 0px 0px #ffffff,
-        /* Inner highlight */
-        inset 0px 0px 0px #808080;
-    /* Inner shadow */
+    box-shadow: 1px 1px 0px #ffffff, -1px -1px 0px #808080;
     font-size: 14px;
-    /* Font size */
 }
 
 /* Window Title Bar */
@@ -119,7 +87,6 @@ nav ul li {
     height: 30px;
     align-items: center;
     box-shadow: 2px 2px #404040, -2px -2px #C0C0C0;
-    width: 60%;
 }
 
 .window-title {
@@ -132,7 +99,6 @@ nav ul li {
 .window-controls {
     display: flex;
     align-items: center;
-    /* Center align vertically */
 }
 
 .window-controls div {
@@ -144,68 +110,97 @@ nav ul li {
     margin-left: 1px;
     height: 22px;
     width: 22px;
-    /* Ensure buttons are displayed inline horizontally */
 }
 
 /* Menu bar */
 .menu-bar {
     display: flex;
-    /* Use flexbox for horizontal layout */
     justify-content: flex-start;
-    /* Align items to the start */
     background-color: #C0C0C0;
-    /* Menu background color */
     border: 2px solid #808080;
-    /* Border for classic look */
     box-shadow: 2px 2px #404040, -2px -2px #C0C0C0;
-    border-right: 2px solid #808080;
-    /* Border for classic look */
-    border-bottom: 2px solid #808080;
-    /* Border for classic look */
     height: 20px;
-    /* Height of the menu bar */
     padding: 0 2px;
-    /* Padding on left and right */
-    margin-bottom: 0px;
-    /* Space below the menu bar */
-    width: 60%;
+    margin-bottom: 0;
 }
 
-/* Styling for the unordered list */
 .menu-bar ul {
-    list-style-type: none;
-    /* Remove bullet points */
-    padding: 0;
-    /* Remove padding */
-    margin: 0;
-    /* Remove margin */
     display: flex;
-    /* Flexbox to display menu items in a row */
+    list-style: none;
+    padding: 0;
+    margin: 0;
     align-items: center;
-    /* Center align vertically */
 }
 
-/* Styling for each menu item */
 .menu-bar ul li {
     padding: 0px 4px;
-    /* Add padding for spacing */
     cursor: pointer;
-    /* Change cursor on hover */
     font-size: 14px;
-    /* Font size for menu items */
-    background-color: #C0C0C0;
-    /* Background color for menu items */
-
     margin-right: 1px;
-    /* Space between menu items */
 }
 
 /* Optional: hover effect for menu items */
 .menu-bar ul li:hover {
     background-color: #dcdcdc;
-    /* Lighter background on hover */
-    border-color: #404040;
-    /* Darker border on hover */
     box-shadow: inset 1px 1px #dcdcdc, inset -1px -1px #404040;
-    /* Sharper shadow effect */
+}
+
+/* Media queries for responsive design */
+@media (max-width: 768px) {
+    .taskbar {
+        flex-wrap: wrap;
+    }
+
+    nav ul {
+        display: none;
+    }
+
+    nav ul.visible {
+        display: flex; 
+        flex-direction: column; 
+        position: fixed; 
+        bottom: 50px; 
+        left: 0; 
+        right: 0; 
+        background-color: #C0C0C0; 
+        padding: 10px; 
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); 
+        z-index: 1000; 
+    }
+
+    nav ul.visible li {
+        width: 100%; 
+        margin-bottom: 10px; 
+    }
+
+    nav ul.visible li a.nav-btn {
+        padding: 10px; 
+        width: 100%; 
+        text-align: left; 
+        box-shadow: inset 1px 1px #ffffff, inset -1px -1px #808080; 
+        background-color: #C0C0C0; 
+        display: block; 
+    }
+
+    .start-btn.active + nav ul {
+        display: flex;
+        position: absolute;
+        bottom: 40px;
+        background-color: #C0C0C0;
+        flex-direction: column;
+        width: 100%;
+        left: 0;
+        z-index: 1000;
+    }
+
+    .nav-btn {
+        padding: 7px 10px;
+        width: 100%;
+        text-align: left;
+    }
+
+    .current-time {
+        font-size: 12px;
+        padding: 5px 10px;
+    }
 }
