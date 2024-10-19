@@ -1,7 +1,7 @@
 import os
 from datetime import datetime, timedelta
 import random
-from .value_generator import generate_random_hostname, generate_random_username, generate_random_filepath, generate_random_filename, generate_random_timestamp
+from .value_generator import generate_random_hostname, generate_random_username, generate_random_filepath, generate_random_filename, generate_random_timestamp, generate_random_tmpfilepath
 
 # Function to generate a single Syslog log entry
 def generate_single_syslog(timestamp, hostname, username, file_path, file_name):
@@ -14,7 +14,7 @@ def generate_single_syslog(timestamp, hostname, username, file_path, file_name):
     process_id = random.randint(10000, 99999)
 
     # Create the log entry
-    log = f"{formatted_timestamp} {hostname} bash[{process_id}]: {file_path}/{file_name} executed by {username}"
+    log = f"{formatted_timestamp} {hostname} bash[{process_id}]: {file_path}{file_name} executed by {username}"
     
     logs.append(log)
     return logs
@@ -31,7 +31,7 @@ def auto_generate_syslog_logs(tmp_execution_chance):
         username = generate_random_username()
         # Decide if the file will be executed from /tmp
         if random.random() < tmp_execution_chance:
-            file_path = '/tmp'
+            file_path = generate_random_tmpfilepath()
         else:
             file_path = generate_random_filepath()
         file_name = generate_random_filename()
