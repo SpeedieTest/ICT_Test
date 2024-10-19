@@ -1,106 +1,98 @@
 import os
 import random
-from datetime import timedelta
-from .value_generator import generate_random_ip, generate_random_interface, generate_random_external_ip, generate_random_timestamp, generate_random_hostname
+import hashlib
+from datetime import datetime, timedelta
+from .value_generator import (generate_random_filename, generate_random_internal_ip, generate_random_timestamp, base_paths, generate_random_external_ip, generate_random_host, generate_random_filehash, generate_random_filepath)
 
-# Function to generate a single iptables log entry
-def generate_single_iptableslog(timestamp, host_name, src_ip, dst_ip, src_port, dst_port, packet_len):
+def generate_snort_logs(start_timestamp, file_hash, source_ip, source_port, file_name, file_size, file_type, filepath):
     logs = []
-    formatted_timestamp = timestamp.strftime('%b %d %H:%M:%S')
-    
-    # Other constants for the log
-    IN_INTERFACE = generate_random_interface()  # Example interface like 'eth0'
-    OUT_INTERFACE = generate_random_interface()  # Example interface like 'eth1'
-    TOS = "0x00"
-    PREC = "0x00"
-    TTL = "64"
-    ID = str(random.randint(10000, 60000))  # Random ID
-    DF = "DF"
-    PROTO = "TCP"
-    WINDOW = "65535"
-    RES = "0x00"
-    FLAGS = "ACK"
-    URGP = "0"
+    formatted_timestamp = start_timestamp.strftime('%b %d %H:%M:%S')
+    destination_ip = generate_random_external_ip()
+    destination_port = 80
+    uri = filepath+file_name
+    host = generate_random_host()
+    process_id = random.randint(1000, 9999)
 
-    # Creating the log in the desired format
-    log = f"{formatted_timestamp} {host_name} iptables: IN={IN_INTERFACE} OUT={OUT_INTERFACE} SRC={src_ip} DST={dst_ip} LEN={packet_len} TOS={TOS} PREC={PREC} TTL={TTL} ID={ID} DF PROTO={PROTO} SPT={src_port} DPT={dst_port} WINDOW={WINDOW} RES={RES} {FLAGS} URGP={URGP}"
-    
-    logs.append(log)
+    log = f"{formatted_timestamp} IDS-Server snort[{process_id}]: [1:{random.randint(1000000, 2000000)}:3] ET MALWARE Malicious File Detected via HTTP (SHA256:{file_hash}) [Classification: Malware Detected] [Priority: 1] {{TCP}} SRC={source_ip}:{source_port} DST={destination_ip}:{destination_port} FileName={file_name} FileSize={file_size} FileType={file_type} URI={uri} Host={host}"
+    logs.append((start_timestamp, log))
 
     return logs
-
-
-def generate_log(timestamp, host_name, src_ip, dst_ip, src_port, dst_port, packet_len):
+    
+# Helper function to generate log with timestamp for sorting
+def generate_log(timestamp, filehash, src_ip, dst_ip, src_port, dst_port, filename, filesize, filetype, uri, host):
     logs = []
     formatted_timestamp = timestamp.strftime('%b %d %H:%M:%S')
-    
-    # Other constants for the log
-    IN_INTERFACE = generate_random_interface()  # Example interface like 'eth0'
-    OUT_INTERFACE = generate_random_interface()  # Example interface like 'eth1'
-    TOS = "0x00"
-    PREC = "0x00"
-    TTL = "64"
-    ID = str(random.randint(10000, 60000))  # Random ID
-    DF = "DF"
-    PROTO = "TCP"
-    WINDOW = "65535"
-    RES = "0x00"
-    FLAGS = "ACK"
-    URGP = "0"
-
-    # Creating the log in the desired format
-    log = f"{formatted_timestamp} {host_name} iptables: IN={IN_INTERFACE} OUT={OUT_INTERFACE} SRC={src_ip} DST={dst_ip} LEN={packet_len} TOS={TOS} PREC={PREC} TTL={TTL} ID={ID} DF PROTO={PROTO} SPT={src_port} DPT={dst_port} WINDOW={WINDOW} RES={RES} {FLAGS} URGP={URGP}"
-    logs.append((timestamp,log))
-
+    log = f"{formatted_timestamp} IDS-Server snort[{random.randint(1000, 9999)}]: [1:{random.randint(1000000, 2000000)}:3] ET MALWARE Malicious File Detected via HTTP (SHA256: {filehash}) [Classification: Malware Detected] [Priority: 1] {{TCP}} SRC={src_ip}:{src_port} DST={dst_ip}:{dst_port} FileName={filename} FileSize={filesize} FileType={filetype} URI={uri} Host={host}"
+    logs.append((timestamp, log))
     return logs
 
-# Function to save iptables logs into a file
-def save_iptables_logs(logs):
-    os.makedirs('logs', exist_ok=True)
-    log_number = 1
-    # Check for existing files and increment log number
-    while os.path.exists(f"logs/iptables_logs_{log_number}.txt"):
-        log_number += 1
-    log_filename = f"logs/iptables_logs_{log_number}.txt"
+# Function that creates a random SHA256 hash
+def generate_random_sha256_hash():
+    # Generate a random byte string of a specific length
+    random_bytes = os.urandom(32)
+    sha256_hash = hashlib.sha256()
+    sha256_hash.update(random_bytes)
+    # Return the hexadecimal representation of the hash
+    return sha256_hash.hexdigest()
 
-    # Write the logs into a single file
-    with open(log_filename, 'w') as file:
-        for log in logs:
-            file.write(log + '\n')
+def generate_random_malicious_path():
+    base_path = random.choice(base_paths)
+    return f"{base_path}/"
 
-# Example function to generate and save multiple iptables logs
-def auto_generate_iptables_logs():
+# Generate 10 random snort logs
+def auto_generate_snort_logs(malware_event_chance):
     logs = []
-    company_external_ip = "198.51.100.1"  # Example external company IP
-    potential_c2_server = generate_random_external_ip()  # Random external IP as C2 server
-    internal_to_c2_chance = 0.05  # 5% chance for C2 connection
+    num_logs = random.randint(10, 30)  # A small company might see 10-30 logs per day
 
-    for _ in range(100):  # Generating 100 logs
-        timestamp = generate_random_timestamp()
-        host_name = generate_random_hostname()
-        src_ip = generate_random_ip()  # Source IP can be internal or external
-        dst_ip = generate_random_external_ip()  # Ensure destination is external
+    for _ in range(num_logs):
+                # Generate each random value and assign to a variable
+                random_timestamp = generate_random_timestamp()
+                file_hash = generate_random_filehash()
+                source_ip = generate_random_internal_ip()
+                destination_ip = generate_random_external_ip()
+                source_port = random.randint(1024, 65535)
+                destination_port = 80
+                file_type = random.choice(['/xdosexec/', '/xpython/', '/plain/', '/mp4/', '/json/', '/csv/', '/zip/', '/gif/', '/pdf/'])
+                file_name = generate_random_filename()
+                file_size = f"{random.randint(10000, 1000000)}"
+                uri = generate_random_filepath()+'/'+file_name
+                host = generate_random_host()
 
-        # 80% chance of internal IP connecting to external company IP, 20% chance for other external IP
-        if random.random() < 0.8:
-            dst_ip = company_external_ip
+                 # Event type logic based on realistic expectations for a small company
+                if random.random() < malware_event_chance:
+                    event_type = 'ET MALWARE'
+                else:
+                    event_type = random.choices(
+                ['ET SCAN', 'ET POLICY', 'ET WEB'],
+                weights=[70, 20, 10],  # Most events are scan, rare malware detections
+                k=1
+                )[0]
 
-        src_port = random.randint(1024, 65535)
-        dst_port = random.randint(1024, 65535)
-        packet_len = random.randint(40, 1500)  # Random packet length
+                if event_type == 'ET SCAN':
+                    log = f"{random_timestamp.strftime('%b %d %H:%M:%S')} IDS-Server snort[{random.randint(1000, 9999)}]: [1:{random.randint(1000000, 2000000)}:1] ET SCAN Suspicious Traffic Detected from {source_ip} to {destination_ip} [Classification: Misc activity] [Priority: 3] {{TCP}} SRC={source_ip}:{source_port} DST={destination_ip}:{destination_port}"
+                elif event_type == 'ET MALWARE':
+                    log = f"{random_timestamp.strftime('%b %d %H:%M:%S')} IDS-Server snort[{random.randint(1000, 9999)}]: [1:{random.randint(1000000, 2000000)}:3] ET MALWARE Malicious File Detected via HTTP (SHA256: {file_hash}) [Classification: Malware Detected] [Priority: 1] {{TCP}} SRC={source_ip}:{source_port} DST={destination_ip}:{destination_port} FileName={file_name} FileSize={file_size} FileType={file_type} URI={uri} Host={host}"
+                elif event_type == 'ET POLICY':
+                    log = f"{random_timestamp.strftime('%b %d %H:%M:%S')} IDS-Server snort[{random.randint(1000, 9999)}]: [1:{random.randint(1000000, 2000000)}:2] ET POLICY Possible Policy Violation detected between {source_ip} and {destination_ip} [Classification: Potential Corporate Policy Violation] [Priority: 2] {{TCP}} SRC={source_ip}:{source_port} DST={destination_ip}:{destination_port}"
+                else:
+                    log = f"{random_timestamp.strftime('%b %d %H:%M:%S')} IDS-Server snort[{random.randint(1000, 9999)}]: [1:{random.randint(1000000, 2000000)}:1] ET WEB HTTP traffic detected (SHA256: {file_hash}) [Classification: Web traffic] [Priority: 3] {{TCP}} SRC={source_ip}:{source_port} DST={destination_ip}:{destination_port} URI={uri} Host={host}"
 
-        logs.extend(generate_log(timestamp, host_name, src_ip, dst_ip, src_port, dst_port, packet_len))
-
-        # Check for C2 connection (internal IP trying to connect to external C2 server)
-        if src_ip.startswith('192.168') or src_ip.startswith('10'):  # Ensure source is internal
-            if random.random() < internal_to_c2_chance:
-                # Log repeated at the same time for each hour the rest of the day
-                for _ in range(23):  # Assuming the day starts at the initial timestamp
-                    timestamp += timedelta(hours=1)
-                    logs.extend(generate_log(timestamp, host_name, src_ip, potential_c2_server, src_port, dst_port, packet_len))
+                logs.append((random_timestamp, log))
 
     # Sort logs by timestamp
     logs.sort(key=lambda x: x[0])
 
     # Extract just the log messages, discarding the timestamp
     return [log for _, log in logs]
+
+def save_snort_logs(logs):
+    os.makedirs('logs', exist_ok=True)
+    log_number = 1
+    
+    while os.path.exists(f"logs/snortlogs_{log_number}.txt"):
+        log_number += 1
+    log_filename = f"logs/snortlogs_{log_number}.txt"
+
+    with open(log_filename, 'w') as file:
+        for log in logs:
+            file.write(log + '\n')
