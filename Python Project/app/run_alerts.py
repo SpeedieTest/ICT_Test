@@ -3,6 +3,8 @@ from datetime import datetime
 from .identify_log_type import identify_log_type
 from .detection_UnknownProcess import analyse_unknown_process
 from .detection_tmpExecution import analyse_tmp_execution
+from .detection_DoS_SYNFlood import analyse_dos_syn_flood
+from .detection_DDoS_SYNFlood import analyse_ddos_syn_flood
 
 # Function to read all log files in a folder
 def read_logs_from_folder(folder_path):
@@ -32,17 +34,24 @@ def process_logs(log_folder_path):
     logs = read_logs_from_folder(log_folder_path)
 
     if logs:
+        # Analyze the logs for potential DoS SYN Flood alerts
+        dos_syn_flood_alerts, dos_syn_flood_details = analyse_dos_syn_flood(logs)
+        # Analyze for DDoS SYN Flood attacks
+        ddos_syn_flood_alerts, ddos_syn_flood_details = analyse_ddos_syn_flood(logs)
+        
         # Analyze for unknown processes in kernel logs
         unknown_process_alerts, unknown_process_details = analyse_unknown_process(logs)
         # Analyze for tmp directory execution in syslog
         tmp_execution_alerts, tmp_execution_details = analyse_tmp_execution(logs)
 
+        
+
         # Combine all alerts and details
         all_alerts = (
-            unknown_process_alerts + tmp_execution_alerts
+             dos_syn_flood_alerts +  ddos_syn_flood_alerts + unknown_process_alerts + tmp_execution_alerts
         )
         all_alert_details = (
-            unknown_process_details + tmp_execution_details
+            dos_syn_flood_details + ddos_syn_flood_details + unknown_process_details + tmp_execution_details
         )
 
         # Sort alerts by detected timestamp
