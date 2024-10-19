@@ -3,6 +3,8 @@ from datetime import datetime
 from .identify_log_type import identify_log_type
 from .detection_UnknownProcess import analyse_unknown_process
 from .detection_tmpExecution import analyse_tmp_execution
+from .detection_bruteforce import analyse_bruteforce
+from .detection_password_spray import analyse_password_spray
 
 # Function to read all log files in a folder
 def read_logs_from_folder(folder_path):
@@ -32,6 +34,10 @@ def process_logs(log_folder_path):
     logs = read_logs_from_folder(log_folder_path)
 
     if logs:
+        # Analyze the logs for potential brute force alerts
+        brute_force_alerts, brute_force_details = analyse_bruteforce(logs)
+        # Analyze the logs for potential password spray alerts
+        password_spray_alerts, password_spray_details = analyse_password_spray(logs)
         # Analyze for unknown processes in kernel logs
         unknown_process_alerts, unknown_process_details = analyse_unknown_process(logs)
         # Analyze for tmp directory execution in syslog
@@ -39,10 +45,10 @@ def process_logs(log_folder_path):
 
         # Combine all alerts and details
         all_alerts = (
-            unknown_process_alerts + tmp_execution_alerts
+            brute_force_alerts + password_spray_alerts + unknown_process_alerts + tmp_execution_alerts
         )
         all_alert_details = (
-            unknown_process_details + tmp_execution_details
+            brute_force_details + password_spray_details + unknown_process_details + tmp_execution_details
         )
 
         # Sort alerts by detected timestamp
