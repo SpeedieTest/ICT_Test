@@ -42,7 +42,7 @@
                 <li>Help</li>
             </ul>
         </div>
-
+        
         <div class="qc-form">
             <form method="POST" action="/submitquick">
                 <div class="FormHeader">
@@ -57,8 +57,7 @@
                         </div>
                         <div class="form-group">
                             <label for="ssh_ipexternal">External IP Chance:</label>
-                            <input type="number" id="ssh_ipexternal" name="ssh_ipexternal"
-                                placeholder="Enter percentage">
+                            <input type="number" id="ssh_ipexternal" name="ssh_ipexternal" placeholder="Enter percentage">
                         </div>
                         <div class="form-group">
                             <label for="ssh_ipexternalbrutefore">External IP Bruteforce chance:</label>
@@ -81,8 +80,7 @@
                         </div>
                         <div class="form-group">
                             <label for="fs_exfiltration">Exfiltration Chance:</label>
-                            <input type="number" id="fs_exfiltration" name="fs_exfiltration"
-                                placeholder="Enter percentage">
+                            <input type="number" id="fs_exfiltration" name="fs_exfiltration" placeholder="Enter percentage">
                         </div>
 
                         <!-- FTP Random generation percentages -->
@@ -153,10 +151,10 @@
                                 placeholder="Enter percentage">
                         </div>
                     </div>
-                </div>
+                </div>           
             </form>
-        </div>
-
+        </div>           
+        
 
         <div class="window-titlebar">
             <div class="window-title">Custom Create</div>
@@ -196,9 +194,9 @@
                     </select>
                 </div>
 
-                <!-- Form sections that will be conditionally displayed -->
+            <!-- Form sections that will be conditionally displayed -->
 
-                <!-- SSH Login Form -->
+            <!-- SSH Login Form -->
                 <div id="section1" style="display: none;">
                     <h3>SSH Login</h3>
                     <div class="form-group">
@@ -235,7 +233,7 @@
                     </div>
                 </div>
 
-                <!-- File System Event Log Form -->
+            <!-- File System Event Log Form -->
                 <div id="section2" style="display: none;">
                     <h3>File System Event Log (Copy File)</h3>
                     <div class="form-group">
@@ -266,11 +264,11 @@
                     <div class="form-group">
                         <label for="fs_destinationPath">Destination Path:</label>
                         <input type="text" id="fs_destinationPath" name="fs_destinationPath"
-                            placeholder="Enter Destination Path">
+                        placeholder="Enter Destination Path">
                     </div>
                 </div>
 
-                <!-- File Transfer Protocol Log Form -->
+            <!-- File Transfer Protocol Log Form -->
                 <div id="section3" style="display: none;">
                     <h3>File Transfer Protocol Logs</h3>
                     <div class="form-group">
@@ -299,7 +297,7 @@
                     </div>
                 </div>
 
-                <!-- iptables Log Form -->
+            <!-- iptables Log Form -->
                 <div id="section4" style="display: none;">
                     <h3>iptables Log</h3>
                     <div class="form-group">
@@ -309,8 +307,7 @@
 
                     <div class="form-group">
                         <label for="iptables_hostName">Host Name:</label>
-                        <input type="text" id="iptables_hostName" name="iptables_hostName"
-                            placeholder="Enter host name">
+                        <input type="text" id="iptables_hostName" name="iptables_hostName" placeholder="Enter host name">
                     </div>
 
                     <div class="form-group">
@@ -364,8 +361,7 @@
 
                     <div class="form-group">
                         <label for="snort_sourceport">Source Port:</label>
-                        <input type="text" id="snort_sourceport" name="snort_sourceport"
-                            placeholder="Enter source port">
+                        <input type="text" id="snort_sourceport" name="snort_sourceport" placeholder="Enter source port">
                     </div>
 
                     <div class="form-group">

@@ -118,6 +118,8 @@
                                         <td>{{ log_entry.file_path }}</td>
                                         <td>{{ log_entry.file_name }}</td>
                                         <td>{{ log_entry.user }}</td>
+                                        {% elif alert.log_source == 'OSINT' %}
+                                        <td>{{ log_entry.source_ip }}</td>
                                         {% endif %}
                                         <td>{{ log_entry.original_log }}</td>
                                     </tr>

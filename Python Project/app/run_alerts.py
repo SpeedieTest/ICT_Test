@@ -1,17 +1,19 @@
 import os
 from datetime import datetime
 from .identify_log_type import identify_log_type
-from .detection_UnknownProcess import analyse_unknown_process
-from .detection_tmpExecution import analyse_tmp_execution
-from .detection_DoS_SYNFlood import analyse_dos_syn_flood
-from .detection_DDoS_SYNFlood import analyse_ddos_syn_flood
 from .detection_bruteforce import analyse_bruteforce
 from .detection_password_spray import analyse_password_spray
-from .detection_c2_server_connection import analyse_c2_server_connections
-from .detection_malware_identified import analyse_malware_detection
 from .detection_media_exfiltration import analyse_exfiltration
 from .detection_mass_download import analyse_mass_download
 from .detection_mass_exfiltration import analyse_mass_exfiltration
+from .detection_c2_server_connection import analyse_c2_server_connections
+from .detection_malware_identified import analyse_malware_detection
+from .detection_DoS_SYNFlood import analyse_dos_syn_flood
+from .detection_DDoS_SYNFlood import analyse_ddos_syn_flood
+from .detection_UnknownProcess import analyse_unknown_process
+from .detection_tmpExecution import analyse_tmp_execution
+from .detection_OSINT import analyse_osint
+
 
 # Function to read all log files in a folder
 def read_logs_from_folder(folder_path):
@@ -41,37 +43,43 @@ def process_logs(log_folder_path):
     logs = read_logs_from_folder(log_folder_path)
 
     if logs:
-        # Analyze the logs for potential DoS SYN Flood alerts
-        dos_syn_flood_alerts, dos_syn_flood_details = analyse_dos_syn_flood(logs)
-        # Analyze for DDoS SYN Flood attacks
-        ddos_syn_flood_alerts, ddos_syn_flood_details = analyse_ddos_syn_flood(logs)
         # Analyze the logs for potential brute force alerts
         brute_force_alerts, brute_force_details = analyse_bruteforce(logs)
         # Analyze the logs for potential password spray alerts
         password_spray_alerts, password_spray_details = analyse_password_spray(logs)
-        # Analyze the logs for potential C2 server connection alerts
-        c2_server_alerts, c2_server_details = analyse_c2_server_connections(logs)
-        # Analyze the logs for potential malware detection alerts
-        malware_alerts, malware_details = analyse_malware_detection(logs)
         # Analyze the logs for potential media exfiltration alerts
         exfiltration_alerts, exfiltration_details = analyse_exfiltration(logs)
         # Analyze the logs for potential mass download alerts
         mass_download_alerts, mass_download_details = analyse_mass_download(logs)
         # Analyze the logs for potential mass exfiltration alerts
         mass_exfiltration_alerts, mass_exfiltration_details = analyse_mass_exfiltration(logs)
+        # Analyze the logs for potential C2 server connection alerts
+        c2_server_alerts, c2_server_details = analyse_c2_server_connections(logs)
+        # Analyze the logs for potential malware detection alerts
+        malware_alerts, malware_details = analyse_malware_detection(logs)
+        # Analyze the logs for potential DoS SYN Flood alerts
+        dos_syn_flood_alerts, dos_syn_flood_details = analyse_dos_syn_flood(logs)
+        # Analyze for DDoS SYN Flood attacks
+        ddos_syn_flood_alerts, ddos_syn_flood_details = analyse_ddos_syn_flood(logs)
         # Analyze for unknown processes in kernel logs
         unknown_process_alerts, unknown_process_details = analyse_unknown_process(logs)
         # Analyze for tmp directory execution in syslog
         tmp_execution_alerts, tmp_execution_details = analyse_tmp_execution(logs)
-
-        
+        # Analyze the logs for external IPs using OSINT (VirusTotal and geo-location)
+        osint_alerts, osint_alert_details = analyse_osint(logs)
 
         # Combine all alerts and details
         all_alerts = (
-            brute_force_alerts + password_spray_alerts + exfiltration_alerts + mass_download_alerts + mass_exfiltration_alerts + dos_syn_flood_alerts +  ddos_syn_flood_alerts + c2_server_alerts + malware_alerts + unknown_process_alerts + tmp_execution_alerts
+            brute_force_alerts + password_spray_alerts + exfiltration_alerts +
+            mass_download_alerts + mass_exfiltration_alerts + c2_server_alerts +
+            malware_alerts + dos_syn_flood_alerts + ddos_syn_flood_alerts +
+            unknown_process_alerts + tmp_execution_alerts + osint_alerts
         )
         all_alert_details = (
-            brute_force_details + password_spray_details + exfiltration_details + mass_download_details + mass_exfiltration_details + dos_syn_flood_details + ddos_syn_flood_details + c2_server_details + malware_details + unknown_process_details + tmp_execution_details
+            brute_force_details + password_spray_details + exfiltration_details +
+            mass_download_details + mass_exfiltration_details + c2_server_details +
+            malware_details + dos_syn_flood_details + ddos_syn_flood_details +
+            unknown_process_details + tmp_execution_details + osint_alert_details
         )
 
         # Sort alerts by detected timestamp

@@ -92,7 +92,6 @@ table tbody td {
 
 /* Media Queries for Responsiveness */
 @media (max-width: 768px) {
-
     .window,
     .window-titlebar,
     .menu-bar {
