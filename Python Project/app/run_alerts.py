@@ -3,6 +3,8 @@ from datetime import datetime
 from .identify_log_type import identify_log_type
 from .detection_UnknownProcess import analyse_unknown_process
 from .detection_tmpExecution import analyse_tmp_execution
+from .detection_c2_server_connection import analyse_c2_server_connections
+from .detection_malware_identified import analyse_malware_detection
 
 # Function to read all log files in a folder
 def read_logs_from_folder(folder_path):
@@ -32,6 +34,11 @@ def process_logs(log_folder_path):
     logs = read_logs_from_folder(log_folder_path)
 
     if logs:
+        # Analyze the logs for potential C2 server connection alerts
+        c2_server_alerts, c2_server_details = analyse_c2_server_connections(logs)
+        # Analyze the logs for potential malware detection alerts
+        malware_alerts, malware_details = analyse_malware_detection(logs)
+
         # Analyze for unknown processes in kernel logs
         unknown_process_alerts, unknown_process_details = analyse_unknown_process(logs)
         # Analyze for tmp directory execution in syslog
@@ -39,10 +46,10 @@ def process_logs(log_folder_path):
 
         # Combine all alerts and details
         all_alerts = (
-            unknown_process_alerts + tmp_execution_alerts
+            unknown_process_alerts + tmp_execution_alerts + c2_server_alerts + malware_alerts
         )
         all_alert_details = (
-            unknown_process_details + tmp_execution_details
+            unknown_process_details + tmp_execution_details + c2_server_details + malware_details
         )
 
         # Sort alerts by detected timestamp
