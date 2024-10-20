@@ -5,7 +5,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="{{ url_for('static', filename='styles/create.css')}}" rel="stylesheet" />
     <link href="{{ url_for('static', filename='styles/style.css')}}" rel="stylesheet" />
     <link href="{{ url_for('static', filename='styles/analyse.css')}}" rel="stylesheet" />
     <script src="{{ url_for('static', filename='js/taskbar.js') }}"></script>
@@ -27,118 +26,116 @@
         <div class="current-time" id="time"></div>
     </div>
 
-    <div class="window-titlebar">
-        <div class="window-title">Log Analysis Alerts</div>
-        <div class="window-controls">
-            <div class="min-btn">_</div>
-            <div class="max-btn">□</div>
-            <div class="close-btn">X</div>
+    <main>
+        <div class="window-titlebar">
+            <div class="window-title">Log Analysis Alerts</div>
+            <div class="window-controls">
+                <div class="min-btn">_</div>
+                <div class="max-btn">□</div>
+                <div class="close-btn">X</div>
+            </div>
         </div>
-    </div>
 
-    <div class="menu-bar">
-        <ul>
-            <li>File</li>
-            <li>Edit</li>
-            <li>Search</li>
-            <li>Help</li>
-        </ul>
-    </div>
+        <div class="menu-bar">
+            <ul>
+                <li>File</li>
+                <li>Edit</li>
+                <li>Search</li>
+                <li>Help</li>
+            </ul>
+        </div>
 
-    <div class="window">
-        <ul>
-            {% if alerts %}
-            {% for alert in alerts %}
-            <li class="alert">
-                Detected Timestamp: {{ alert.detected_timestamp }}
-                <strong>{{ alert.alert_message }}</strong> <br>
-                <span class="arrow" onclick="toggleDetails(this);">&#9660;</span>
-                <div class="hidden">
-                    <table>
-                        <thead>
-                            <tr>
-                                {% for column in alert.columns %}
-                                <th>{{ column }}</th>
-                                {% endfor %}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for log in alert_details %}
-                            {% if log.alert_message == alert.alert_message %}
-                            {% for log_entry in log.logs %}
-                            <tr>
-                                <td>{{ log_entry.timestamp }}</td>
-                                {% if alert.log_source == 'ssh' %}
-                                <td>{{ log_entry.hostname }}</td>
-                                <td>{{ log_entry.username }}</td>
-                                <td>{{ log_entry.source_ip }}</td>
-                                <td>{{ log_entry.status }}</td>
-                                <td>{{ log_entry.port }}</td>
-                                {% elif alert.log_source == 'ftp' %}
-                                <td>{{ log_entry.user }}</td>
-                                <td>{{ log_entry.source_ip }}</td>
-                                <td>{{ log_entry.file_name }}</td>
-                                <td>{{ log_entry.file_path }}</td>
-                                <td>{{ log_entry.file_size_gb }}</td>
-                                {% elif alert.log_source == 'file_system' %}
-                                <td>{{ log_entry.hostname }}</td>
-                                <td>{{ log_entry.user }}</td>
-                                <td>{{ log_entry.event }}</td>
-                                <td>{{ log_entry.file_name }}</td>
-                                <td>{{ log_entry.file_path }}</td>
-                                <td>{{ log_entry.destination_path }}</td>
-                                {% elif alert.log_source == 'iptables' %}
-                                <td>{{ log_entry.hostname }}</td>
-                                <td>{{ log_entry.source_ip }}</td>
-                                <td>{{ log_entry.source_port }}</td>
-                                <td>{{ log_entry.destination_ip }}</td>
-                                <td>{{ log_entry.destination_port }}</td>
-                                {% elif alert.log_source == 'snort' %}
-                                <td>{{ log_entry.source_ip }}</td>
-                                <td>{{ log_entry.destination_ip }}</td>
-                                <td>{{ log_entry.file_name }}</td>
-                                <td>{{ log_entry.file_hash }}</td>
-                                <td>{{ log_entry.file_type }}</td>
-                                <td>{{ log_entry.uri }}</td>
-                                <td>{{ log_entry.host }}</td>
-                                {% elif alert.log_source == 'netflow' %}
-                                <td>{{ log_entry.source_ip }}</td>
-                                <td>{{ log_entry.destination_ip }}</td>
-                                <td>{{ log_entry.source_port }}</td>
-                                <td>{{ log_entry.destination_port }}</td>
-                                <td>{{ log_entry.tcp_flags }}</td>
-                                {% elif alert.log_source == 'kernel' %}
-                                <td>{{ log_entry.hostname }}</td>
-                                <td>{{ log_entry.process }}</td>
-                                <td>{{ log_entry.pid }}</td>
-                                <td>{{ log_entry.event }}</td>
-                                {% elif alert.log_source == 'syslog' %}
-                                <td>{{ log_entry.hostname }}</td>
-                                <td>{{ log_entry.file_path }}</td>
-                                <td>{{ log_entry.file_name }}</td>
-                                <td>{{ log_entry.user }}</td>
-                                {% endif %}
-                                <td>{{ log_entry.original_log }}</td>
-                            </tr>
-                            {% endfor %}
-                            {% endif %}
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </li>
-            {% endfor %}
-            {% else %}
-            <li class="no-alerts">No alerts detected!</li>
-            {% endif %}
-        </ul>
-    </div>
-
-
-
-    <script>
-
-    </script>
+        <div class="window">
+            <ul>
+                {% if alerts %}
+                {% for alert in alerts %}
+                <li class="alert">
+                    Detected Timestamp: {{ alert.detected_timestamp }}
+                    <strong>{{ alert.alert_message }}</strong> <br>
+                    <span class="arrow" onclick="toggleDetails(this);">&#9660;</span>
+                    <div class="hidden">
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        {% for column in alert.columns %}
+                                        <th>{{ column }}</th>
+                                        {% endfor %}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for log in alert_details %}
+                                    {% if log.alert_message == alert.alert_message %}
+                                    {% for log_entry in log.logs %}
+                                    <tr>
+                                        <td>{{ log_entry.timestamp }}</td>
+                                        {% if alert.log_source == 'ssh' %}
+                                        <td>{{ log_entry.hostname }}</td>
+                                        <td>{{ log_entry.username }}</td>
+                                        <td>{{ log_entry.source_ip }}</td>
+                                        <td>{{ log_entry.status }}</td>
+                                        <td>{{ log_entry.port }}</td>
+                                        {% elif alert.log_source == 'ftp' %}
+                                        <td>{{ log_entry.user }}</td>
+                                        <td>{{ log_entry.source_ip }}</td>
+                                        <td>{{ log_entry.file_name }}</td>
+                                        <td>{{ log_entry.file_path }}</td>
+                                        <td>{{ log_entry.file_size_gb }}</td>
+                                        {% elif alert.log_source == 'file_system' %}
+                                        <td>{{ log_entry.hostname }}</td>
+                                        <td>{{ log_entry.user }}</td>
+                                        <td>{{ log_entry.event }}</td>
+                                        <td>{{ log_entry.file_name }}</td>
+                                        <td>{{ log_entry.file_path }}</td>
+                                        <td>{{ log_entry.destination_path }}</td>
+                                        {% elif alert.log_source == 'iptables' %}
+                                        <td>{{ log_entry.hostname }}</td>
+                                        <td>{{ log_entry.source_ip }}</td>
+                                        <td>{{ log_entry.source_port }}</td>
+                                        <td>{{ log_entry.destination_ip }}</td>
+                                        <td>{{ log_entry.destination_port }}</td>
+                                        {% elif alert.log_source == 'snort' %}
+                                        <td>{{ log_entry.source_ip }}</td>
+                                        <td>{{ log_entry.destination_ip }}</td>
+                                        <td>{{ log_entry.file_name }}</td>
+                                        <td>{{ log_entry.file_hash }}</td>
+                                        <td>{{ log_entry.file_type }}</td>
+                                        <td>{{ log_entry.uri }}</td>
+                                        <td>{{ log_entry.host }}</td>
+                                        {% elif alert.log_source == 'netflow' %}
+                                        <td>{{ log_entry.source_ip }}</td>
+                                        <td>{{ log_entry.destination_ip }}</td>
+                                        <td>{{ log_entry.source_port }}</td>
+                                        <td>{{ log_entry.destination_port }}</td>
+                                        <td>{{ log_entry.tcp_flags }}</td>
+                                        {% elif alert.log_source == 'kernel' %}
+                                        <td>{{ log_entry.hostname }}</td>
+                                        <td>{{ log_entry.process }}</td>
+                                        <td>{{ log_entry.pid }}</td>
+                                        <td>{{ log_entry.event }}</td>
+                                        {% elif alert.log_source == 'syslog' %}
+                                        <td>{{ log_entry.hostname }}</td>
+                                        <td>{{ log_entry.file_path }}</td>
+                                        <td>{{ log_entry.file_name }}</td>
+                                        <td>{{ log_entry.user }}</td>
+                                        {% endif %}
+                                        <td>{{ log_entry.original_log }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                    {% endif %}
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </li>
+                {% endfor %}
+                {% else %}
+                <li class="no-alerts">No alerts detected!</li>
+                {% endif %}
+            </ul>
+        </div>
+    </main>
 </body>
 
 </html>

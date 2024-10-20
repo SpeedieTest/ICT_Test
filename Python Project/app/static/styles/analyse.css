@@ -26,25 +26,25 @@ main {
     background-color: #ffffff;
     border: 2px solid #808080;
     padding: 10px;
-    max-height: calc(100vh - 60px); /* Window height minus taskbar */
+    max-height: calc(100vh - 60px);
     box-shadow: 2px 2px #404040, -2px -2px #C0C0C0;
     box-sizing: border-box;
-    overflow-y: auto; /* Enable vertical scrolling if content overflows */
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Scrollable table container */
 .table-container {
-    max-height: 100%; /* Make sure the table container doesn't exceed the window */
-    overflow-y: auto; /* Enable vertical scrolling if the table content overflows */
-    padding-bottom: 10px; /* Space between the table and window edge */
+    flex-grow: 1;
+    max-height: 100%;
 }
 
 /* General Table Styling */
 table {
-    width: 100%; /* Ensure the table uses the full width of the container */
+    width: 100%;
     border-collapse: collapse;
     font-family: "MS Sans Serif", sans-serif;
-    margin-bottom: 10px;
     table-layout: auto;
 }
 
@@ -92,6 +92,7 @@ table tbody td {
 
 /* Media Queries for Responsiveness */
 @media (max-width: 768px) {
+
     .window,
     .window-titlebar,
     .menu-bar {
@@ -100,7 +101,7 @@ table tbody td {
 
     table {
         width: 100%;
-        table-layout: fixed; /* Ensure the table adjusts to small screens */
+        table-layout: fixed;
     }
 
     table thead th,
