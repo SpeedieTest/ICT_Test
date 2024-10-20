@@ -1,7 +1,7 @@
 import os
 import random
 from datetime import datetime, timedelta
-from .value_generator import (generate_random_username, generate_random_hostname, generate_random_source_path, generate_random_exfiltration_path, generate_random_timestamp)
+from .value_generator import (generate_random_username, generate_random_hostname, generate_random_source_path, generate_random_exfiltration_path, generate_random_timestamp, generate_random_sensitive_filepath)
 
 #function to generate a single file system event log
 def generate_single_fslog(timestamp, host_name, user_acc, file_name, source_path, destination_path=None):
@@ -40,6 +40,7 @@ def auto_generate_fs_logs(chance_of_exfiltration):
 
         #10% chance of data exfiltration
         if random.random() < chance_of_exfiltration:
+            source_path = generate_random_sensitive_filepath()
             destination_path = generate_random_exfiltration_path()
 
         logs.extend(generate_log(timestamp, host_name, user_acc, file_name, source_path, destination_path))

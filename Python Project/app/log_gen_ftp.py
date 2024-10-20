@@ -46,8 +46,8 @@ def auto_generate_ftp_logs(mass_download_chance, mass_exfiltration_chance):
         #chance of mass exfiltration
         if random.random() < mass_exfiltration_chance:
             #simulate multiple logs for exfiltration from the same user
-            exfiltration_size = random.randint(250, 500) #total exfiltration size between 250 and 500 GB
-            num_exfiltration_logs = random.randint(5, 10) #exfiltration occurs over 5 to 10 logs
+            exfiltration_size = random.randint(500, 1000) #total exfiltration size between 250 and 500 GB
+            num_exfiltration_logs = random.randint(5, 30) #exfiltration occurs over 5 to 10 logs
             per_log_size = exfiltration_size // num_exfiltration_logs
 
             timestamp = generate_random_timestamp()

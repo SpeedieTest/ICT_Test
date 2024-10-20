@@ -9,6 +9,9 @@ from .detection_bruteforce import analyse_bruteforce
 from .detection_password_spray import analyse_password_spray
 from .detection_c2_server_connection import analyse_c2_server_connections
 from .detection_malware_identified import analyse_malware_detection
+from .detection_media_exfiltration import analyse_exfiltration
+from .detection_mass_download import analyse_mass_download
+from .detection_mass_exfiltration import analyse_mass_exfiltration
 
 # Function to read all log files in a folder
 def read_logs_from_folder(folder_path):
@@ -50,7 +53,12 @@ def process_logs(log_folder_path):
         c2_server_alerts, c2_server_details = analyse_c2_server_connections(logs)
         # Analyze the logs for potential malware detection alerts
         malware_alerts, malware_details = analyse_malware_detection(logs)
-
+        # Analyze the logs for potential media exfiltration alerts
+        exfiltration_alerts, exfiltration_details = analyse_exfiltration(logs)
+        # Analyze the logs for potential mass download alerts
+        mass_download_alerts, mass_download_details = analyse_mass_download(logs)
+        # Analyze the logs for potential mass exfiltration alerts
+        mass_exfiltration_alerts, mass_exfiltration_details = analyse_mass_exfiltration(logs)
         # Analyze for unknown processes in kernel logs
         unknown_process_alerts, unknown_process_details = analyse_unknown_process(logs)
         # Analyze for tmp directory execution in syslog
@@ -60,10 +68,10 @@ def process_logs(log_folder_path):
 
         # Combine all alerts and details
         all_alerts = (
-            brute_force_alerts + password_spray_alerts + dos_syn_flood_alerts +  ddos_syn_flood_alerts + c2_server_alerts + malware_alerts + unknown_process_alerts + tmp_execution_alerts
+            brute_force_alerts + password_spray_alerts + exfiltration_details + mass_download_details + mass_exfiltration_details + dos_syn_flood_alerts +  ddos_syn_flood_alerts + c2_server_alerts + malware_alerts + unknown_process_alerts + tmp_execution_alerts
         )
         all_alert_details = (
-            brute_force_details + password_spray_details + dos_syn_flood_details + ddos_syn_flood_details + c2_server_details + malware_details + unknown_process_details + tmp_execution_details
+            brute_force_details + password_spray_details + exfiltration_details + mass_download_details + mass_exfiltration_details + dos_syn_flood_details + ddos_syn_flood_details + c2_server_details + malware_details + unknown_process_details + tmp_execution_details
         )
 
         # Sort alerts by detected timestamp
