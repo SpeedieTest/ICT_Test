@@ -76,6 +76,10 @@ nav ul li {
     font-size: 14px;
 }
 
+main {
+    margin-bottom: 50px;
+}
+
 /* Window Title Bar */
 .window-titlebar {
     display: flex;

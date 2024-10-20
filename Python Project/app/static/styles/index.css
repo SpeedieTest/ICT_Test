@@ -6,6 +6,11 @@ body {
     padding: 0;
 }
 
+main {
+    float: left;
+    width: 100%;
+}
+
 .window-titlebar {
     width: 75%;
 }
