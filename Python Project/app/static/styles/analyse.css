@@ -1,6 +1,6 @@
+/* General Element Styling */
 .arrow {
     cursor: pointer;
-    display: inline-block;
     margin-left: 10px;
 }
 
@@ -8,39 +8,110 @@
     display: none;
 }
 
-.window-titlebar {
-    width: 95%;
+main {
+    float: left;
+    width: 100%;
 }
 
-.menu-bar {
+/* Window Title Bar and Menu Bar */
+.window-titlebar,
+.menu-bar,
+.window {
     width: 95%;
+    margin-left: 5px;
 }
 
-/* Window Content */
+/* Window Styling */
 .window {
     background-color: #ffffff;
     border: 2px solid #808080;
     padding: 10px;
-    width: 95%;
-    font-family: "Tahoma", sans-serif;
+    max-height: calc(100vh - 60px); /* Window height minus taskbar */
     box-shadow: 2px 2px #404040, -2px -2px #C0C0C0;
-    /* 3D window effect */
     box-sizing: border-box;
+    overflow-y: auto; /* Enable vertical scrolling if content overflows */
 }
 
-.window p {
+/* Scrollable table container */
+.table-container {
+    max-height: 100%; /* Make sure the table container doesn't exceed the window */
+    overflow-y: auto; /* Enable vertical scrolling if the table content overflows */
+    padding-bottom: 10px; /* Space between the table and window edge */
+}
+
+/* General Table Styling */
+table {
+    width: 100%; /* Ensure the table uses the full width of the container */
+    border-collapse: collapse;
+    font-family: "MS Sans Serif", sans-serif;
+    margin-bottom: 10px;
+    table-layout: auto;
+}
+
+/* Table Header Styling */
+table thead th {
+    background-color: #C0C0C0;
+    color: black;
+    text-align: left;
+    padding: 8px;
+    border: 1px solid #808080;
     font-weight: bold;
+    box-shadow: inset 1px 1px #ffffff, inset -1px -1px #808080;
 }
 
-.window p,
-.window li {
-    margin: 0;
-    padding: 5px 0;
-    font-size: 14px;
+/* Table Body Styling */
+table tbody td {
+    padding: 8px;
+    border: 1px solid #808080;
+    text-align: left;
+    vertical-align: top;
+    background-color: #FFFFFF;
+    box-shadow: inset 1px 1px #ffffff, inset -1px -1px #808080;
 }
 
-/* List styling in the window */
-.window ul {
-    padding-left: 20px;
-    margin: 0;
+/* Alternating Row Colors for Better Readability */
+table tbody tr:nth-child(even) {
+    background-color: #F0F0F0;
+}
+
+/* Align First Column Center */
+table tbody td:first-child {
+    text-align: center;
+}
+
+/* Hover Effect for Rows */
+table tbody tr:hover {
+    background-color: #E0E0E0;
+}
+
+/* Ensure Long Text Wraps in Table Cells */
+table tbody td {
+    word-wrap: break-word;
+    white-space: normal;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+    .window,
+    .window-titlebar,
+    .menu-bar {
+        width: 100%;
+    }
+
+    table {
+        width: 100%;
+        table-layout: fixed; /* Ensure the table adjusts to small screens */
+    }
+
+    table thead th,
+    table tbody td {
+        font-size: 12px;
+        padding: 6px;
+    }
+
+    .window p,
+    .window li {
+        font-size: 12px;
+        padding: 4px 0;
+    }
 }

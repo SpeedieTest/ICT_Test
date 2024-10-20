@@ -61,6 +61,35 @@ main form {
     width: 70%;
 }
 
+/* Radio Button Styling */
+input[type="radio"] {
+    appearance: none;
+    background-color: #C0C0C0; 
+    width: 18px;
+    height: 18px;
+    margin-right: 5px;
+    position: relative;
+    cursor: pointer;
+}
+
+/* Checked state */
+input[type="radio"]:checked {
+    background-color: white; 
+}
+
+/* Custom dot for checked radio */
+input[type="radio"]:checked::before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 10px;
+    height: 10px;
+    background-color: #000080;
+    border-radius: 20%;
+}
+
 select {
     background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="5" viewBox="0 0 10 5"><path fill="black" d="M0 0l5 5 5-5H0z"/></svg>');
     background-repeat: no-repeat;
