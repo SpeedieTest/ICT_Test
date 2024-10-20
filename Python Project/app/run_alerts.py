@@ -68,7 +68,7 @@ def process_logs(log_folder_path):
 
         # Combine all alerts and details
         all_alerts = (
-            brute_force_alerts + password_spray_alerts + exfiltration_details + mass_download_details + mass_exfiltration_details + dos_syn_flood_alerts +  ddos_syn_flood_alerts + c2_server_alerts + malware_alerts + unknown_process_alerts + tmp_execution_alerts
+            brute_force_alerts + password_spray_alerts + exfiltration_alerts + mass_download_alerts + mass_exfiltration_alerts + dos_syn_flood_alerts +  ddos_syn_flood_alerts + c2_server_alerts + malware_alerts + unknown_process_alerts + tmp_execution_alerts
         )
         all_alert_details = (
             brute_force_details + password_spray_details + exfiltration_details + mass_download_details + mass_exfiltration_details + dos_syn_flood_details + ddos_syn_flood_details + c2_server_details + malware_details + unknown_process_details + tmp_execution_details
