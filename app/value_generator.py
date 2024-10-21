@@ -70,6 +70,21 @@ kernel_log_message = [
     "unmounted file system", "detected CPU overheating warning", "initiating shutdown sequence",
 ]
 
+external_ips = [
+        "50.3.222.157",
+        "198.51.100.2",
+        "103.18.103.27",
+        "203.0.113.4",
+        "45.141.148.16",
+        "192.0.2.6",
+        "130.211.108.73",
+        "198.51.100.8",
+        "192.0.2.9",
+        "203.0.113.10"
+    ]
+
+
+
 # Function to generate random usernames
 def generate_random_username():
     return random.choice(usernames)
@@ -99,7 +114,7 @@ def generate_random_filename():
     return random.choice(file_names)
 
 # Function to generate a random IP address (internal/external based on probability)
-def generate_random_ip(external_chance=0.1):
+def generate_random_ip(external_chance):
     if random.random() < external_chance:
         # Generate an external IP
         return generate_random_external_ip()
@@ -117,7 +132,7 @@ def generate_random_internal_ip():
             return f"10.{random.randint(0, 255)}.{random.randint(0, 255)}.{random.randint(0, 255)}"
 
 def generate_random_external_ip():
-    return f"{random.randint(1, 255)}.{random.randint(1, 255)}.{random.randint(1, 255)}.{random.randint(1, 255)}"
+    return random.choice(external_ips)
         
 # Function to generate random network interfaces (e.g., eth0, eth1)
 def generate_random_interface():
