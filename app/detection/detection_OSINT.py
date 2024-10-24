@@ -58,7 +58,6 @@ def check_ip_virustotal(ip, api_key):
     
     if response.status_code == 200:
         data = response.json()
-        print(f"Full VirusTotal Response for IP {ip}:\n{data}\n")  # Print the full response
         return data, response.status_code
     else:
         print(f"VirusTotal API request failed for IP {ip}: Status Code {response.status_code}")
@@ -75,7 +74,6 @@ def check_ip_ipinfo(ip):
             print(f"IPinfo.io API request failed for IP {ip}: Status Code {response.status_code}")
             return "Unknown"
     except Exception as e:
-        print(f"Error fetching country from ipinfo.io for IP {ip}: {e}")
         return "Unknown"
 
 # Function to get full country name using pycountry
@@ -87,7 +85,6 @@ def get_country_name_from_code(country_code):
         else:
             return "Unknown Country"
     except Exception as e:
-        print(f"Error fetching country name for code {country_code}: {e}")
         return "Unknown Country"
 
 # Function to analyze logs and detect malicious IPs or non-Australian IPs
@@ -141,10 +138,7 @@ def analyse_osint(logs):
 
         # Use ipinfo.io if VirusTotal does not return a country code
         if not country_code or country_code == "Unknown":
-            print(f"Using ipinfo.io to get country code for IP {ip}")
             country_code = check_ip_ipinfo(ip)
-
-        print(f"Country code for IP {ip}: {country_code}")
 
         if country_code and country_code != 'Unknown':
             country_name = get_country_name_from_code(country_code)
