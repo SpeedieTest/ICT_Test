@@ -13,15 +13,7 @@ INTERNAL_IP_RANGES = [
     ('192.168.0.0', '192.168.255.255')    # Private IP range for Class C
 ]
 
-# API keys for VirusTotal
-VIRUSTOTAL_API_KEYS = [
-    os.getenv("VIRUSTOTAL_API_KEY_S"),
-    os.getenv("VIRUSTOTAL_API_KEY_J"),
-    os.getenv("VIRUSTOTAL_API_KEY_D"),
-    os.getenv("VIRUSTOTAL_API_KEY_SS"),
-    #os.getenv("VIRUSTOTAL_API_KEY_M"),
-    #os.getenv("VIRUSTOTAL_API_KEY_N")
-]
+VIRUSTOTAL_API_KEY = os.getenv("VIRUSTOTAL_API_KEY")
 IPINFO_API_KEY = os.getenv("IPINFO_API_KEY")
 VIRUSTOTAL_URL = 'https://www.virustotal.com/vtapi/v2/ip-address/report'
 AUSTRALIAN_COUNTRY_CODE = 'AU'
@@ -46,22 +38,22 @@ def is_internal_or_company_ip(ip):
     return False
 
 # Function to check IP with VirusTotal
-def check_ip_virustotal(ip, api_key):
-    params = {'apikey': api_key, 'ip': ip}
+def check_ip_virustotal(ip):
+    params = {'apikey': VIRUSTOTAL_API_KEY, 'ip': ip}
     response = requests.get(VIRUSTOTAL_URL, params=params)
     
     # Handle rate limiting with a 204 response code
     if response.status_code == 204:
         print(f"Rate limit hit. Waiting for {RATE_LIMIT_SLEEP_TIME} seconds before retrying...")
         time.sleep(RATE_LIMIT_SLEEP_TIME)  # Wait before retrying
-        return None, 204  # Indicate that the rate limit was hit
+        return check_ip_virustotal(ip)  # Retry the request after waiting
     
     if response.status_code == 200:
         data = response.json()
-        return data, response.status_code
+        return data
     else:
         print(f"VirusTotal API request failed for IP {ip}: Status Code {response.status_code}")
-        return None, response.status_code
+        return None
 
 # Function to check IP with ipinfo.io if VirusTotal returns no country
 def check_ip_ipinfo(ip):
@@ -92,7 +84,6 @@ def analyse_osint(logs):
     unique_ips = set()  # Store unique IPs
     alerts = []  # Store generated alert messages
     alert_details = []  # Store detailed information about each alert
-    api_key_index = 0  # Start with the first API key
 
     # Iterate through logs to collect external unique IPs
     for log in logs:
@@ -105,18 +96,7 @@ def analyse_osint(logs):
 
     # Check each unique IP with VirusTotal
     for ip in unique_ips:
-        while True:
-            # Rotate through API keys
-            api_key = VIRUSTOTAL_API_KEYS[api_key_index]
-            api_key_index = (api_key_index + 1) % len(VIRUSTOTAL_API_KEYS)
-
-            virustotal_data, status_code = check_ip_virustotal(ip, api_key)
-
-            # If a rate limit was hit (204 status code), we retry after a delay
-            if status_code == 204:
-                time.sleep(RATE_LIMIT_SLEEP_TIME)
-            else:
-                break
+        virustotal_data = check_ip_virustotal(ip)
         country_code = None
 
         if virustotal_data:
@@ -138,7 +118,10 @@ def analyse_osint(logs):
 
         # Use ipinfo.io if VirusTotal does not return a country code
         if not country_code or country_code == "Unknown":
+            print(f"Using ipinfo.io to get country code for IP {ip}")
             country_code = check_ip_ipinfo(ip)
+
+        print(f"Country code for IP {ip}: {country_code}")
 
         if country_code and country_code != 'Unknown':
             country_name = get_country_name_from_code(country_code)
