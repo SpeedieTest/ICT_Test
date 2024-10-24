@@ -1,9 +1,9 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Toggle Start Button Menu (Burger Menu)
     const startBtn = document.querySelector('.start-btn');
     const navMenu = document.querySelector('nav ul');
 
-    startBtn.addEventListener('click', function() {
+    startBtn.addEventListener('click', function () {
         navMenu.classList.toggle('visible'); // Toggles the visibility of the menu
     });
 

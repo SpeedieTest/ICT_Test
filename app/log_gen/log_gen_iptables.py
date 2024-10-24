@@ -1,7 +1,7 @@
 import os
 import random
 from datetime import datetime, timedelta
-from app.value_generator import (generate_random_username, generate_random_ip, generate_random_hostname, generate_random_event_outcome, generate_random_timestamp, generate_random_interface, generate_random_external_ip)
+from app.value_generator import (generate_random_ip, generate_random_hostname, generate_random_timestamp, generate_random_interface, generate_random_external_ip)
 
 def generate_iptables_logs(start_timestamp, host_name, source_ip, destination_ip, source_port, destination_port, packet_length):
     logs = []
@@ -28,21 +28,24 @@ def generate_iptables_logs(start_timestamp, host_name, source_ip, destination_ip
     return logs
 
 
-def generate_random_iptables_logs(c2_attack_chance):
+def generate_random_iptables_logs(c2_attack_chance, external_chance):
     logs = []
     company_external_ip = "198.26.177.2" # Example external company IP
     potential_c2_server = generate_random_external_ip() 
 
-    # 198.26.177.2Generate random normal logs for other times of the day
+    # 198.26.177.2 Generate random normal logs for other times of the day
     for _ in range(100):  # Amount of normal logs that are generated
         timestamp = generate_random_timestamp()
-        source_ip = generate_random_ip()
-        destination_ip = generate_random_external_ip() 
-        host_name = generate_random_hostname()
-
-        # 80% chance of internal IP connecting to external company IP, 20% chance for other external IP
-        if random.random() < 0.8:
+        source_ip = generate_random_ip(external_chance)
+        if source_ip.startswith('192.168') or source_ip.startswith('10'):
+            # 80% chance of internal IP connecting to external company IP, 20% chance for other external IP
+            if random.random() < 0.8:
+                destination_ip = company_external_ip
+            else:
+                destination_ip = generate_random_external_ip()
+        else:
             destination_ip = company_external_ip
+        host_name = generate_random_hostname()
 
         source_port = random.randint(1024, 65535)
         destination_port = random.randint(1024, 65535)

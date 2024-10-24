@@ -62,7 +62,8 @@ nav ul li {
 }
 
 /* Hover effect for buttons */
-.start-btn:hover, .nav-btn:hover {
+.start-btn:hover,
+.nav-btn:hover {
     background-color: #dcdcdc;
     box-shadow: inset 1px 1px #dcdcdc, inset -1px -1px #404040;
 }
@@ -160,33 +161,33 @@ main {
     }
 
     nav ul.visible {
-        display: flex; 
-        flex-direction: column; 
-        position: fixed; 
-        bottom: 50px; 
-        left: 0; 
-        right: 0; 
-        background-color: #C0C0C0; 
-        padding: 10px; 
-        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); 
-        z-index: 1000; 
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        bottom: 50px;
+        left: 0;
+        right: 0;
+        background-color: #C0C0C0;
+        padding: 10px;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        z-index: 1000;
     }
 
     nav ul.visible li {
-        width: 100%; 
-        margin-bottom: 10px; 
+        width: 100%;
+        margin-bottom: 10px;
     }
 
     nav ul.visible li a.nav-btn {
-        padding: 10px; 
-        width: 100%; 
-        text-align: left; 
-        box-shadow: inset 1px 1px #ffffff, inset -1px -1px #808080; 
-        background-color: #C0C0C0; 
-        display: block; 
+        padding: 10px;
+        width: 100%;
+        text-align: left;
+        box-shadow: inset 1px 1px #ffffff, inset -1px -1px #808080;
+        background-color: #C0C0C0;
+        display: block;
     }
 
-    .start-btn.active + nav ul {
+    .start-btn.active+nav ul {
         display: flex;
         position: absolute;
         bottom: 40px;

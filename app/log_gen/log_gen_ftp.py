@@ -1,7 +1,7 @@
 import os
 import random
 from datetime import datetime, timedelta
-from app.value_generator import (generate_random_username, generate_random_ip, generate_random_file_path, generate_random_timestamp)
+from app.value_generator import (generate_random_username, generate_random_internal_ip, generate_random_file_path, generate_random_timestamp)
 
 def generate_single_ftplog(timestamp, client_ip, file_size, username, file_path):
     logs = []
@@ -25,7 +25,7 @@ def auto_generate_ftp_logs(mass_download_chance, mass_exfiltration_chance):
     #generate normal logs
     for _ in range(100): #100 logs
         timestamp = generate_random_timestamp()
-        client_ip = generate_random_ip()
+        client_ip = generate_random_internal_ip()
         file_size = random.randint(1, 100) #file size between 1 and 100GB
         username = generate_random_username()
         file_path = generate_random_file_path()
@@ -36,7 +36,7 @@ def auto_generate_ftp_logs(mass_download_chance, mass_exfiltration_chance):
         if random.random() < mass_download_chance:
             #simulate a single large download event
             timestamp = generate_random_timestamp()
-            client_ip = generate_random_ip()
+            client_ip = generate_random_internal_ip()
             mass_download_size = random.randint(250, 500) #mass download size between 250 GB and 500 GB
             username = generate_random_username()
             file_path = generate_random_file_path()
@@ -51,7 +51,7 @@ def auto_generate_ftp_logs(mass_download_chance, mass_exfiltration_chance):
             per_log_size = exfiltration_size // num_exfiltration_logs
 
             timestamp = generate_random_timestamp()
-            client_ip = generate_random_ip()
+            client_ip = generate_random_internal_ip()
             username = generate_random_username()
 
             for _ in range(num_exfiltration_logs):

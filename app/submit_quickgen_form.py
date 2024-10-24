@@ -52,7 +52,7 @@ def handle_quickgen_form(request):
     ftplogs = auto_generate_ftp_logs(ftp_massdownload, ftp_massexfiltration)
     save_ftp_logs(ftplogs)
 
-    iptableslogs = generate_random_iptables_logs(iptables_c2)
+    iptableslogs = generate_random_iptables_logs(iptables_c2, ssh_ipexternal)
     save_iptables_logs(iptableslogs)
 
     snortlogs = auto_generate_snort_logs(snort_malware)

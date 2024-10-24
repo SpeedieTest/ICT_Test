@@ -4,7 +4,8 @@
     padding: 0;
 }
 
-button, .btn {
+button,
+.btn {
     background-color: #C0C0C0;
     border: 1px solid #808080;
     box-shadow: 1px 1px 0px #000000, -1px -1px 0px #ffffff;
@@ -18,12 +19,14 @@ button, .btn {
     display: inline-block;
 }
 
-button:hover, .btn:hover {
+button:hover,
+.btn:hover {
     background-color: #A0A0A0;
     box-shadow: 1px 1px 0px #ffffff, -1px -1px 0px #404040;
 }
 
-.window-titlebar, .menu-bar {
+.window-titlebar,
+.menu-bar {
     width: 100%;
     padding: 5px;
 }
@@ -51,7 +54,9 @@ main form {
     margin-left: 5%;
 }
 
-.qc-form input, .cc-form input, select {
+.qc-form input,
+.cc-form input,
+select {
     background-color: #ffffff;
     border: none;
     box-shadow: 1px 1px 0px #000000, -1px -1px 0px #ffffff;
@@ -64,7 +69,7 @@ main form {
 /* Radio Button Styling */
 input[type="radio"] {
     appearance: none;
-    background-color: #C0C0C0; 
+    background-color: #C0C0C0;
     width: 18px;
     height: 18px;
     margin-right: 5px;
@@ -74,7 +79,7 @@ input[type="radio"] {
 
 /* Checked state */
 input[type="radio"]:checked {
-    background-color: white; 
+    background-color: white;
 }
 
 /* Custom dot for checked radio */
@@ -102,7 +107,8 @@ select:focus {
     box-shadow: inset 1px 1px 0px #808080, inset -1px -1px 0px #ffffff;
 }
 
-input[type="submit"], input[type="quick-gen"] {
+input[type="submit"],
+input[type="quick-gen"] {
     padding: 5px;
     font-size: 16px;
     cursor: pointer;
@@ -140,7 +146,9 @@ h4 {
     main {
         width: 100%;
     }
-    .sidebar, aside {
+
+    .sidebar,
+    aside {
         width: 100%;
         margin-right: 0;
         float: none;
@@ -148,12 +156,17 @@ h4 {
 }
 
 @media (max-width: 768px) {
-    button, .btn, select, input {
+
+    button,
+    .btn,
+    select,
+    input {
         font-size: 12px;
         padding: 5px;
     }
 
-    input[type="submit"], input[type="quick-gen"] {
+    input[type="submit"],
+    input[type="quick-gen"] {
         width: 40%;
     }
 

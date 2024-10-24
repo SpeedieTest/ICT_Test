@@ -300,7 +300,7 @@ def handle_iptables_logs (request):
 
 
 def generate_iptables_logs_quick():
-    logs = generate_random_iptables_logs(0.05)
+    logs = generate_random_iptables_logs(0.05, 0.8)
     save_iptables_logs(logs)
     return "Random iptables logs generated successfuly!"
 
