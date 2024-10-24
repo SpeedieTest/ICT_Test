@@ -1,20 +1,20 @@
 from datetime import datetime
 # Import SSHlogin log creation.
-from .log_gen_ssh import generate_single_sshlog, save_ssh_logs, auto_generate_ssh_logs
+from app.log_gen.log_gen_ssh import generate_single_sshlog, save_ssh_logs, auto_generate_ssh_logs
 # Import ftp log creation
-from .log_gen_ftp import generate_single_ftplog, save_ftp_logs, auto_generate_ftp_logs
+from app.log_gen.log_gen_ftp import generate_single_ftplog, save_ftp_logs, auto_generate_ftp_logs
 # Import filesystem log creation
-from .log_gen_filesystem import generate_single_fslog, save_fs_logs, auto_generate_fs_logs
+from app.log_gen.log_gen_filesystem import generate_single_fslog, save_fs_logs, auto_generate_fs_logs
 # iptables Imports
-from .log_gen_iptables import generate_iptables_logs, save_iptables_logs, generate_random_iptables_logs
+from app.log_gen.log_gen_iptables import generate_iptables_logs, save_iptables_logs, generate_random_iptables_logs
 # Snort Imports
-from .log_gen_snort import generate_snort_logs, save_snort_logs, auto_generate_snort_logs
+from app.log_gen.log_gen_snort import generate_snort_logs, save_snort_logs, auto_generate_snort_logs
 # Import netflow log creation
-from .log_gen_netflow import generate_single_netflowlog, save_netflow_logs, auto_generate_netflow_logs
+from app.log_gen.log_gen_netflow import generate_single_netflowlog, save_netflow_logs, auto_generate_netflow_logs
 # Import Kernel log creation
-from .log_gen_kernel import generate_single_kernellog, save_kernel_logs, auto_generate_kernel_logs
+from app.log_gen.log_gen_kernel import generate_single_kernellog, save_kernel_logs, auto_generate_kernel_logs
 # Import Systemlog log creation
-from .log_gen_syslog import generate_single_syslog, auto_generate_syslog_logs, save_syslog_logs
+from app.log_gen.log_gen_syslog import generate_single_syslog, auto_generate_syslog_logs, save_syslog_logs
 
 def handle_submit_form(request):
     log_type = request.form.get('dropdown')

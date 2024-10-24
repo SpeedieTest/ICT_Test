@@ -1,7 +1,7 @@
 import os
 import random
 from datetime import datetime, timedelta
-from .value_generator import (generate_random_username, generate_random_ip, generate_random_file_path, generate_random_timestamp)
+from app.value_generator import (generate_random_username, generate_random_ip, generate_random_file_path, generate_random_timestamp)
 
 def generate_single_ftplog(timestamp, client_ip, file_size, username, file_path):
     logs = []

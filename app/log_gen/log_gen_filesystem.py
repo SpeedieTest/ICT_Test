@@ -1,7 +1,7 @@
 import os
 import random
 from datetime import datetime, timedelta
-from .value_generator import (generate_random_username, generate_random_hostname, generate_random_source_path, generate_random_exfiltration_path, generate_random_timestamp, generate_random_sensitive_filepath)
+from app.value_generator import (generate_random_username, generate_random_hostname, generate_random_source_path, generate_random_exfiltration_path, generate_random_timestamp, generate_random_sensitive_filepath)
 
 #function to generate a single file system event log
 def generate_single_fslog(timestamp, host_name, user_acc, file_name, source_path, destination_path=None):

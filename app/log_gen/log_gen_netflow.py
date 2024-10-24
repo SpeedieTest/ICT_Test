@@ -2,7 +2,7 @@ import os
 import random
 import ipaddress  # Import to handle CIDR and IP addresses
 from datetime import timedelta
-from .value_generator import (generate_random_external_ip, generate_random_timestamp, generate_random_internal_ip)
+from app.value_generator import (generate_random_external_ip, generate_random_timestamp, generate_random_internal_ip)
 
 # Function to generate a random IP from a given CIDR network range
 def generate_random_ip_from_cidr(cidr):

@@ -2,7 +2,7 @@ import os
 import random
 import hashlib
 from datetime import datetime, timedelta
-from .value_generator import (generate_random_filename, generate_random_internal_ip, generate_random_timestamp, base_paths, generate_random_external_ip, generate_random_host, generate_random_filehash, generate_random_filepath)
+from app.value_generator import (generate_random_filename, generate_random_internal_ip, generate_random_timestamp, base_paths, generate_random_external_ip, generate_random_host, generate_random_filehash, generate_random_filepath)
 
 def generate_snort_logs(start_timestamp, file_hash, source_ip, source_port, file_name, file_size, file_type, filepath):
     logs = []
@@ -58,7 +58,7 @@ def auto_generate_snort_logs(malware_event_chance):
                 uri = generate_random_filepath()+'/'+file_name
                 host = generate_random_host()
 
-                 # Event type logic based on realistic expectations for a small company
+                # Event type logic based on realistic expectations for a small company
                 if random.random() < malware_event_chance:
                     event_type = 'ET MALWARE'
                 else:

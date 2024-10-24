@@ -1,7 +1,7 @@
 import os
 import random
 from datetime import datetime, timedelta
-from .value_generator import (generate_random_username, generate_random_ip, generate_random_hostname, generate_random_event_outcome, generate_random_timestamp)
+from app.value_generator import (generate_random_username, generate_random_ip, generate_random_hostname, generate_random_event_outcome, generate_random_timestamp)
 
 # Function to generate synthetic logs
 def generate_single_sshlog(start_timestamp, host_name, source_ip, user_acc, event_outcome, num_logs):

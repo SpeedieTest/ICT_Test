@@ -1,7 +1,7 @@
 import os
 import random
 from datetime import datetime, timedelta
-from .value_generator import (generate_random_username, generate_random_ip, generate_random_hostname, generate_random_event_outcome, generate_random_timestamp, generate_random_interface, generate_random_external_ip)
+from app.value_generator import (generate_random_username, generate_random_ip, generate_random_hostname, generate_random_event_outcome, generate_random_timestamp, generate_random_interface, generate_random_external_ip)
 
 def generate_iptables_logs(start_timestamp, host_name, source_ip, destination_ip, source_port, destination_port, packet_length):
     logs = []

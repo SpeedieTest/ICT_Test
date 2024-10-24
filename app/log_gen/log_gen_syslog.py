@@ -1,7 +1,7 @@
 import os
 from datetime import datetime, timedelta
 import random
-from .value_generator import generate_random_hostname, generate_random_username, generate_random_filepath, generate_random_filename, generate_random_timestamp, generate_random_tmpfilepath
+from app.value_generator import generate_random_hostname, generate_random_username, generate_random_filepath, generate_random_filename, generate_random_timestamp, generate_random_tmpfilepath
 
 # Function to generate a single Syslog log entry
 def generate_single_syslog(timestamp, hostname, username, file_path, file_name):

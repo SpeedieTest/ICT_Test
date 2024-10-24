@@ -1,11 +1,11 @@
-from .log_gen_ssh import auto_generate_ssh_logs, save_ssh_logs
-from .log_gen_filesystem import auto_generate_fs_logs, save_fs_logs
-from .log_gen_ftp import auto_generate_ftp_logs, save_ftp_logs
-from .log_gen_iptables import generate_random_iptables_logs, save_iptables_logs
-from .log_gen_snort import auto_generate_snort_logs, save_snort_logs
-from .log_gen_netflow import auto_generate_netflow_logs, save_netflow_logs
-from .log_gen_kernel import auto_generate_kernel_logs, save_kernel_logs
-from .log_gen_syslog import auto_generate_syslog_logs, save_syslog_logs
+from app.log_gen.log_gen_ssh import auto_generate_ssh_logs, save_ssh_logs
+from app.log_gen.log_gen_filesystem import auto_generate_fs_logs, save_fs_logs
+from app.log_gen.log_gen_ftp import auto_generate_ftp_logs, save_ftp_logs
+from app.log_gen.log_gen_iptables import generate_random_iptables_logs, save_iptables_logs
+from app.log_gen.log_gen_snort import auto_generate_snort_logs, save_snort_logs
+from app.log_gen.log_gen_netflow import auto_generate_netflow_logs, save_netflow_logs
+from app.log_gen.log_gen_kernel import auto_generate_kernel_logs, save_kernel_logs
+from app.log_gen.log_gen_syslog import auto_generate_syslog_logs, save_syslog_logs
 
 def handle_quickgen_form(request):
     # List of form fields to convert

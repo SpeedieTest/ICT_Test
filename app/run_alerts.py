@@ -1,18 +1,18 @@
 import os
 from datetime import datetime
 from .identify_log_type import identify_log_type
-from .detection_bruteforce import analyse_bruteforce
-from .detection_password_spray import analyse_password_spray
-from .detection_media_exfiltration import analyse_exfiltration
-from .detection_mass_download import analyse_mass_download
-from .detection_mass_exfiltration import analyse_mass_exfiltration
-from .detection_c2_server_connection import analyse_c2_server_connections
-from .detection_malware_identified import analyse_malware_detection
-from .detection_DoS_SYNFlood import analyse_dos_syn_flood
-from .detection_DDoS_SYNFlood import analyse_ddos_syn_flood
-from .detection_UnknownProcess import analyse_unknown_process
-from .detection_tmpExecution import analyse_tmp_execution
-from .detection_OSINT import analyse_osint
+from app.detection.detection_bruteforce import analyse_bruteforce
+from app.detection.detection_password_spray import analyse_password_spray
+from app.detection.detection_media_exfiltration import analyse_exfiltration
+from app.detection.detection_mass_download import analyse_mass_download
+from app.detection.detection_mass_exfiltration import analyse_mass_exfiltration
+from app.detection.detection_c2_server_connection import analyse_c2_server_connections
+from app.detection.detection_malware_identified import analyse_malware_detection
+from app.detection.detection_DoS_SYNFlood import analyse_dos_syn_flood
+from app.detection.detection_DDoS_SYNFlood import analyse_ddos_syn_flood
+from app.detection.detection_UnknownProcess import analyse_unknown_process
+from app.detection.detection_tmpExecution import analyse_tmp_execution
+from app.detection.detection_OSINT import analyse_osint
 
 
 # Function to read all log files in a folder

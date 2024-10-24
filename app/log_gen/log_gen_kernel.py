@@ -1,7 +1,7 @@
 import os
 from datetime import datetime, timedelta
 import random
-from .value_generator import generate_random_hostname, generate_random_processname, generate_random_kernellogmessage
+from app.value_generator import generate_random_hostname, generate_random_processname, generate_random_kernellogmessage
 
 # Function to generate a single Kernel log entry
 def generate_single_kernellog(timestamp, host_name, process_name):
