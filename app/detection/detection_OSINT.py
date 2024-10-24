@@ -13,7 +13,15 @@ INTERNAL_IP_RANGES = [
     ('192.168.0.0', '192.168.255.255')    # Private IP range for Class C
 ]
 
-VIRUSTOTAL_API_KEY = os.getenv("VIRUSTOTAL_API_KEY")
+# API keys for VirusTotal
+VIRUSTOTAL_API_KEYS = [
+    os.getenv("VIRUSTOTAL_API_KEY_S"),
+    os.getenv("VIRUSTOTAL_API_KEY_J"),
+    os.getenv("VIRUSTOTAL_API_KEY_D"),
+    os.getenv("VIRUSTOTAL_API_KEY_SS"),
+    #os.getenv("VIRUSTOTAL_API_KEY_M"),
+    #os.getenv("VIRUSTOTAL_API_KEY_N")
+]
 IPINFO_API_KEY = os.getenv("IPINFO_API_KEY")
 VIRUSTOTAL_URL = 'https://www.virustotal.com/vtapi/v2/ip-address/report'
 AUSTRALIAN_COUNTRY_CODE = 'AU'
@@ -38,8 +46,8 @@ def is_internal_or_company_ip(ip):
     return False
 
 # Function to check IP with VirusTotal
-def check_ip_virustotal(ip):
-    params = {'apikey': VIRUSTOTAL_API_KEY, 'ip': ip}
+def check_ip_virustotal(ip, api_key):
+    params = {'apikey': api_key, 'ip': ip}
     response = requests.get(VIRUSTOTAL_URL, params=params)
     
     # Handle rate limiting with a 204 response code
@@ -99,7 +107,18 @@ def analyse_osint(logs):
 
     # Check each unique IP with VirusTotal
     for ip in unique_ips:
-        virustotal_data = check_ip_virustotal(ip)
+        while True:
+            # Rotate through API keys
+            api_key = VIRUSTOTAL_API_KEYS[api_key_index]
+            api_key_index = (api_key_index + 1) % len(VIRUSTOTAL_API_KEYS)
+
+            virustotal_data, status_code = check_ip_virustotal(ip, api_key)
+
+            # If a rate limit was hit (204 status code), we retry after a delay
+            if status_code == 204:
+                time.sleep(RATE_LIMIT_SLEEP_TIME)
+            else:
+                break
         country_code = None
 
         if virustotal_data:
